@@ -6,76 +6,76 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900">Manage Your Bookings</h1>
-            <p class="text-sm text-slate-500 mt-1">Review active travel reservations, download e-tickets, or process cancellations.</p>
+            <h1 class="text-2xl font-black text-slate-900 dark:text-white">Manage Bookings & Cancellations</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Review active journeys, download boarding passes, or initiate refunds.</p>
         </div>
 
         <!-- PNR Search Form -->
         <form action="{{ url_for('my_bookings') }}" method="GET" class="flex items-center space-x-2">
-            <input type="text" name="pnr" value="{{ search_pnr }}" placeholder="Search by PNR (e.g. PNR-BMB-1001)" class="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none w-64">
-            <button type="submit" class="bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">
+            <input type="text" name="pnr" value="{{ search_pnr }}" placeholder="Search by PNR (e.g. PNR-BMB-1001)" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-4 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:outline-none w-64 shadow-sm">
+            <button type="submit" class="bg-slate-900 dark:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-slate-800 dark:hover:bg-slate-700 transition">
                 Search
             </button>
             {% if search_pnr %}
-                <a href="{{ url_for('my_bookings') }}" class="text-xs text-rose-600 hover:underline">Clear</a>
+                <a href="{{ url_for('my_bookings') }}" class="text-xs text-rose-600 dark:text-rose-400 hover:underline font-semibold">Clear</a>
             {% endif %}
         </form>
     </div>
 
     {% if bookings %}
-        <div class="space-y-6">
+        <div class="space-y-4">
             {% for b in bookings %}
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
                     <div class="flex items-center space-x-3">
-                        <span class="px-3 py-1 rounded-lg font-mono text-sm font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                        <span class="px-3.5 py-1 rounded-xl font-mono text-sm font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700">
                             {{ b.pnr_number }}
                         </span>
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold {% if b.booking_status == 'CONFIRMED' %}bg-emerald-50 text-emerald-700{% else %}bg-rose-50 text-rose-700{% endif %}">
+                        <span class="px-3 py-0.5 rounded-full text-xs font-bold {% if b.booking_status == 'CONFIRMED' %}bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400{% else %}bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400{% endif %}">
                             {{ b.booking_status }}
                         </span>
                     </div>
-                    <div class="text-xs text-slate-400">
-                        Booked on: <span class="text-slate-600 font-medium">{{ b.booking_timestamp }}</span>
+                    <div class="text-xs text-slate-400 dark:text-slate-500 font-medium">
+                        Booked on: <span class="text-slate-700 dark:text-slate-300 font-semibold">{{ b.booking_timestamp }}</span>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 py-6 items-center">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 py-5 items-center">
                     <div>
-                        <p class="text-xs text-slate-400 uppercase font-semibold">Bus Operator</p>
-                        <h4 class="text-base font-bold text-slate-900 mt-1">{{ b.operator_name }}</h4>
-                        <p class="text-xs text-slate-500">{{ b.bus_type }}</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider">Coach Operator</p>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mt-1">{{ b.operator_name }}</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ b.bus_type }}</p>
                     </div>
 
                     <div>
-                        <p class="text-xs text-slate-400 uppercase font-semibold">Travel Corridor</p>
-                        <p class="text-sm font-bold text-slate-800 mt-1">{{ b.source_city }} &rarr; {{ b.destination_city }}</p>
-                        <p class="text-xs text-slate-500">{{ b.trip_date }} at {{ b.departure_time }}</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider">Corridor</p>
+                        <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">{{ b.source_city }} &rarr; {{ b.destination_city }}</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ b.trip_date }} at {{ b.departure_time }}</p>
                     </div>
 
                     <div>
-                        <p class="text-xs text-slate-400 uppercase font-semibold">Seats Booked</p>
-                        <p class="text-sm font-bold text-slate-800 mt-1">{{ b.total_seats }} Passenger(s)</p>
-                        <p class="text-xs text-emerald-600 font-semibold">&#8377;{{ b.total_amount }} ({{ b.payment_status }})</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider">Passengers & Tariff</p>
+                        <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">{{ b.total_seats }} Passenger(s)</p>
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 font-bold">&#8377;{{ b.total_amount }} ({{ b.payment_status }})</p>
                     </div>
 
-                    <div class="flex items-center justify-end space-x-3">
-                        <a href="{{ url_for('confirmation', pnr=b.pnr_number) }}" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition inline-flex items-center space-x-1">
+                    <div class="flex items-center justify-start md:justify-end space-x-3 pt-3 md:pt-0">
+                        <a href="{{ url_for('confirmation', pnr=b.pnr_number) }}" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition inline-flex items-center space-x-1.5">
                             <i class="fa-solid fa-eye"></i>
-                            <span>View Ticket</span>
+                            <span>View Boarding Pass</span>
                         </a>
 
                         {% if b.booking_status == 'CONFIRMED' %}
-                            <form action="{{ url_for('cancel_ticket') }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel booking {{ b.pnr_number }}? This will release the allocated seats immediately and trigger a full refund.')">
+                            <form action="{{ url_for('cancel_ticket') }}" method="POST" onsubmit="return confirm('Cancel reservation {{ b.pnr_number }}? Allocated seats will be instantly released.')">
                                 <input type="hidden" name="pnr" value="{{ b.pnr_number }}">
-                                <button type="submit" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition inline-flex items-center space-x-1">
+                                <button type="submit" class="px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 text-rose-700 dark:text-rose-400 text-xs font-bold transition inline-flex items-center space-x-1.5">
                                     <i class="fa-solid fa-ban"></i>
                                     <span>Cancel Ticket</span>
                                 </button>
                             </form>
                         {% else %}
-                            <span class="text-xs font-bold text-slate-400 italic">
-                                <i class="fa-solid fa-rotate-left mr-1"></i> Refund Processed
+                            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 italic">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Refund Completed
                             </span>
                         {% endif %}
                     </div>
@@ -84,16 +84,16 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center">
-            <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-2xl mx-auto mb-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-12 text-center shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl mx-auto mb-4">
                 <i class="fa-solid fa-ticket"></i>
             </div>
-            <h3 class="text-lg font-bold text-slate-900">No bookings found</h3>
-            <p class="text-sm text-slate-500 max-w-sm mx-auto mt-1 mb-6">
-                You haven't made any reservations matching this search, or the booking record is empty.
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">No active bookings found</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-6">
+                You haven't made any reservations matching this query.
             </p>
-            <a href="{{ url_for('trips') }}" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition">
-                <span>Book a Ticket Now</span>
+            <a href="{{ url_for('trips') }}" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-500/20 transition">
+                <span>Book a Seat Now</span>
             </a>
         </div>
     {% endif %}

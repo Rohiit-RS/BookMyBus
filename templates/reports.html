@@ -1,90 +1,90 @@
 {% extends "base.html" %}
 
-{% block title %}Executive Reports & Analytics - BookMyBus{% endblock %}
+{% block title %}Executive Analytics & Fleet Insights - BookMyBus{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold mb-2 border border-emerald-200">
+            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-[11px] font-bold mb-2 border border-emerald-200 dark:border-emerald-800">
                 <i class="fa-solid fa-chart-pie"></i>
-                <span>Database Systems Analytical Reports (PDF Task #10 & #13)</span>
+                <span>Financial & Fleet Intelligence</span>
             </div>
-            <h1 class="text-2xl font-bold text-slate-900">Operational & Financial Reports</h1>
-            <p class="text-sm text-slate-500 mt-0.5">Computed using SQL Aggregates (`COUNT`, `SUM`, `AVG`), `GROUP BY`, and `HAVING` filters.</p>
+            <h1 class="text-2xl font-black text-slate-900 dark:text-white">Operational Analytics & Revenue Reports</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Real-time corridor gross sales, occupancy distributions, and seat utilization metrics.</p>
         </div>
 
-        <a href="{{ url_for('sql_lab') }}" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition inline-flex items-center space-x-1.5 shadow-sm">
-            <i class="fa-solid fa-terminal text-rose-400"></i>
-            <span>Inspect Underlying SQL Queries</span>
+        <a href="{{ url_for('sql_lab') }}" class="px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-xs font-bold hover:bg-slate-800 dark:hover:bg-slate-700 transition inline-flex items-center space-x-1.5 shadow-sm border border-transparent dark:border-slate-700">
+            <i class="fa-solid fa-terminal text-brand-500"></i>
+            <span>Inspect Underlying Queries</span>
         </a>
     </div>
 
     <!-- Summary KPI Cards -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Total Bookings (COUNT)</span>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
+            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Total Bookings</span>
             <div class="flex items-baseline justify-between mt-2">
-                <span class="text-3xl font-extrabold text-slate-900">{{ analytics.metrics.total_bookings }}</span>
-                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">All time</span>
+                <span class="text-3xl font-black text-slate-900 dark:text-white">{{ analytics.metrics.total_bookings }}</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full">All time</span>
             </div>
-            <p class="text-[11px] text-slate-400 mt-2">`COUNT(booking_id)` from bookings</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-medium">Verified reservation transactions</p>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Gross Revenue (SUM)</span>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
+            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Gross Revenue</span>
             <div class="flex items-baseline justify-between mt-2">
-                <span class="text-3xl font-extrabold text-brand-600">&#8377;{{ analytics.metrics.total_revenue }}</span>
-                <span class="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">Net Confirmed</span>
+                <span class="text-3xl font-black text-brand-600 dark:text-brand-400">&#8377;{{ analytics.metrics.total_revenue }}</span>
+                <span class="text-xs font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 px-2.5 py-0.5 rounded-full">Confirmed</span>
             </div>
-            <p class="text-[11px] text-slate-400 mt-2">`SUM(total_amount)` where CONFIRMED</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-medium">Net settled ticket receipts</p>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Confirmed Passengers</span>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
+            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Passengers Traveled</span>
             <div class="flex items-baseline justify-between mt-2">
-                <span class="text-3xl font-extrabold text-slate-900">{{ analytics.metrics.total_passengers }}</span>
-                <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Seats Filled</span>
+                <span class="text-3xl font-black text-slate-900 dark:text-white">{{ analytics.metrics.total_passengers }}</span>
+                <span class="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-full">Allocated</span>
             </div>
-            <p class="text-[11px] text-slate-400 mt-2">`SUM(total_seats)` seat allocations</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-medium">Individual passenger seats</p>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Cancellations</span>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
+            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Cancellations</span>
             <div class="flex items-baseline justify-between mt-2">
-                <span class="text-3xl font-extrabold text-slate-700">{{ analytics.metrics.cancelled_bookings }}</span>
-                <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Refunded</span>
+                <span class="text-3xl font-black text-slate-700 dark:text-slate-300">{{ analytics.metrics.cancelled_bookings }}</span>
+                <span class="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2.5 py-0.5 rounded-full">Refunded</span>
             </div>
-            <p class="text-[11px] text-slate-400 mt-2">Freed up for new reservations</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-medium">Released for immediate rebooking</p>
         </div>
     </div>
 
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         <!-- Revenue by Route Chart -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
                 <div>
-                    <h3 class="font-bold text-slate-900 text-sm">Revenue Generated per Route</h3>
-                    <p class="text-xs text-slate-400">Queried from relational view `vw_route_revenue`</p>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm">Revenue Generated per Route</h3>
+                    <p class="text-xs text-slate-400">Aggregated revenue from confirmed passenger bookings</p>
                 </div>
-                <span class="text-xs font-bold text-brand-600">&#8377; Gross INR</span>
+                <span class="text-xs font-bold text-brand-600 dark:text-brand-400">&#8377; Gross INR</span>
             </div>
-            <div class="h-64">
+            <div class="h-64 relative">
                 <canvas id="routeRevenueChart"></canvas>
             </div>
         </div>
 
         <!-- Bus Fleet Occupancy Chart -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
                 <div>
-                    <h3 class="font-bold text-slate-900 text-sm">Bus Fleet Occupancy Rate (%)</h3>
-                    <p class="text-xs text-slate-400">Calculated as (Seats Booked &times; 100) / Total Capacity</p>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm">Coach Fleet Occupancy Rate (%)</h3>
+                    <p class="text-xs text-slate-400">Ratio of booked seats versus scheduled vehicle capacity</p>
                 </div>
-                <span class="text-xs font-bold text-emerald-600">% Occupied</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">% Occupancy</span>
             </div>
-            <div class="h-64">
+            <div class="h-64 relative">
                 <canvas id="occupancyChart"></canvas>
             </div>
         </div>
@@ -93,14 +93,14 @@
     <!-- Tabular Summaries Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Top Routes Summary -->
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-            <div class="p-5 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900 text-sm">Route Performance Summary (`vw_route_revenue`)</h3>
-                <p class="text-xs text-slate-400">Aggregated with `GROUP BY r.source_city, r.destination_city`</p>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors duration-200">
+            <div class="p-5 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-bold text-slate-900 dark:text-white text-sm">Corridor Financial Performance</h3>
+                <p class="text-xs text-slate-400">Ranked by gross sales volume and passenger volume</p>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                    <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
                         <tr>
                             <th class="py-3 px-4">Corridor</th>
                             <th class="py-3 px-4">Trips</th>
@@ -108,13 +108,13 @@
                             <th class="py-3 px-4 text-right">Total Revenue</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
                         {% for r in analytics.top_routes %}
                         <tr>
-                            <td class="py-3 px-4 font-bold text-slate-800">{{ r.source_city }} &rarr; {{ r.destination_city }}</td>
-                            <td class="py-3 px-4 text-slate-600">{{ r.total_trips }}</td>
-                            <td class="py-3 px-4 text-slate-600">{{ r.confirmed_passengers }} seats</td>
-                            <td class="py-3 px-4 text-right font-bold text-brand-600">&#8377;{{ r.total_revenue }}</td>
+                            <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-white">{{ r.source_city }} &rarr; {{ r.destination_city }}</td>
+                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">{{ r.total_trips }}</td>
+                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">{{ r.confirmed_passengers }} seats</td>
+                            <td class="py-3.5 px-4 text-right font-black text-brand-600 dark:text-brand-400">&#8377;{{ r.total_revenue }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -123,31 +123,31 @@
         </div>
 
         <!-- Fleet Utilization Summary -->
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-            <div class="p-5 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900 text-sm">Bus Utilization & Occupancy Rate</h3>
-                <p class="text-xs text-slate-400">Evaluates fleet scheduling efficiency</p>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors duration-200">
+            <div class="p-5 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-bold text-slate-900 dark:text-white text-sm">Fleet Capacity Utilization</h3>
+                <p class="text-xs text-slate-400">Efficiency ratings for vehicle schedules across network</p>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                    <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
                         <tr>
-                            <th class="py-3 px-4">Bus / Operator</th>
+                            <th class="py-3 px-4">Coach / Operator</th>
                             <th class="py-3 px-4">Capacity</th>
                             <th class="py-3 px-4">Booked</th>
                             <th class="py-3 px-4 text-right">Occupancy %</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
                         {% for b in analytics.occupancy %}
                         <tr>
-                            <td class="py-3 px-4">
-                                <p class="font-bold text-slate-800">{{ b.operator_name }}</p>
+                            <td class="py-3.5 px-4">
+                                <p class="font-bold text-slate-800 dark:text-white">{{ b.operator_name }}</p>
                                 <p class="text-[10px] text-slate-400 font-mono">{{ b.bus_number }}</p>
                             </td>
-                            <td class="py-3 px-4 text-slate-600">{{ b.total_seats }} seats</td>
-                            <td class="py-3 px-4 text-slate-600">{{ b.seats_booked }} seats</td>
-                            <td class="py-3 px-4 text-right font-bold {% if (b.occupancy_percentage or 0) > 40 %}text-emerald-600{% else %}text-slate-600{% endif %}">
+                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">{{ b.total_seats }} seats</td>
+                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">{{ b.seats_booked }} seats</td>
+                            <td class="py-3.5 px-4 text-right font-bold {% if (b.occupancy_percentage or 0) > 40 %}text-emerald-600 dark:text-emerald-400{% else %}text-slate-600 dark:text-slate-400{% endif %}">
                                 {{ b.occupancy_percentage or 0 }}%
                             </td>
                         </tr>
@@ -162,6 +162,10 @@
 
 {% block scripts %}
 <script>
+    const isDark = document.documentElement.classList.contains('dark');
+    const textColor = isDark ? '#94a3b8' : '#64748b';
+    const gridColor = isDark ? '#334155' : '#f1f5f9';
+
     // Route Revenue Chart
     const routeLabels = [{% for r in analytics.top_routes %}'{{ r.source_city }} -> {{ r.destination_city }}',{% endfor %}];
     const routeRevenues = [{% for r in analytics.top_routes %}{{ r.total_revenue }},{% endfor %}];
@@ -174,7 +178,7 @@
             datasets: [{
                 label: 'Revenue (INR)',
                 data: routeRevenues,
-                backgroundColor: 'rgba(225, 29, 72, 0.8)',
+                backgroundColor: 'rgba(225, 29, 72, 0.85)',
                 borderColor: 'rgba(225, 29, 72, 1)',
                 borderWidth: 1,
                 borderRadius: 8
@@ -187,9 +191,18 @@
                 legend: { display: false }
             },
             scales: {
+                x: {
+                    ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 } },
+                    grid: { display: false }
+                },
                 y: {
                     beginAtZero: true,
-                    ticks: { callback: value => '₹' + value }
+                    ticks: { 
+                        color: textColor, 
+                        font: { family: 'Plus Jakarta Sans', size: 10 },
+                        callback: value => '₹' + value 
+                    },
+                    grid: { color: gridColor }
                 }
             }
         }
@@ -207,7 +220,7 @@
             datasets: [{
                 label: 'Occupancy %',
                 data: busOccupancy,
-                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                backgroundColor: 'rgba(16, 185, 129, 0.85)',
                 borderColor: 'rgba(16, 185, 129, 1)',
                 borderWidth: 1,
                 borderRadius: 8
@@ -220,10 +233,19 @@
                 legend: { display: false }
             },
             scales: {
+                x: {
+                    ticks: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 } },
+                    grid: { display: false }
+                },
                 y: {
                     beginAtZero: true,
                     max: 100,
-                    ticks: { callback: value => value + '%' }
+                    ticks: { 
+                        color: textColor, 
+                        font: { family: 'Plus Jakarta Sans', size: 10 },
+                        callback: value => value + '%' 
+                    },
+                    grid: { color: gridColor }
                 }
             }
         }

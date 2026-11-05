@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}BookMyBus - Real-Time Bus Reservation System (DBS Project){% endblock %}
+{% block title %}BookMyBus - Premium Bus Ticket Booking & Intercity Network{% endblock %}
 
 {% block content %}
-<!-- Hero Section with Background Gradient -->
-<section class="relative bg-gradient-to-b from-rose-50 via-white to-slate-50 pt-12 pb-20 border-b border-slate-200">
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-b from-rose-50/70 via-white to-slate-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 pt-12 pb-16 border-b border-slate-200 dark:border-slate-800 transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- Project Tag -->
-        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold mb-6 shadow-sm">
-            <i class="fa-solid fa-database"></i>
-            <span>DBS Course Project • Bus Reservation System • 3NF Relational DB</span>
+        <!-- Live Fleet Pill -->
+        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-rose-100/80 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/60 text-rose-700 dark:text-rose-300 text-xs font-semibold mb-6 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+            <span>Real-Time Seat Inventory &bull; Instant PNR Ticketing</span>
         </div>
 
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-            Smart, Fast & Seamless <br class="hidden sm:block">
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-rose-500">Bus Ticket Booking</span>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
+            Travel Comfortably Across <br class="hidden sm:block">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-rose-500">Major Metro Corridors</span>
         </h1>
-        <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-10">
-            Real-time seat reservation with instant PNR generation, route analytics, and live SQL database query showcase.
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10">
+            Choose your preferred seats with live cabin visualizer, instant confirmed bookings, and flexible cancellation.
         </p>
 
         <!-- Bus Search Widget Card -->
-        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200 p-6 md:p-8">
+        <div class="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-6 md:p-8 transition-colors duration-200">
             <form action="{{ url_for('trips') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <!-- Source City -->
                 <div class="text-left">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                        <i class="fa-solid fa-location-dot text-brand-600 mr-1"></i> From (Origin)
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+                        <i class="fa-solid fa-location-dot text-brand-600 dark:text-brand-400 mr-1"></i> Origin
                     </label>
                     <div class="relative">
-                        <select name="source" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-3 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition">
+                        <select name="source" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-3 text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
                             <option value="">Select Origin City</option>
                             {% for city in cities %}
                                 <option value="{{ city }}">{{ city }}</option>
@@ -40,11 +40,11 @@
 
                 <!-- Destination City -->
                 <div class="text-left">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                        <i class="fa-solid fa-location-crosshairs text-brand-600 mr-1"></i> To (Destination)
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+                        <i class="fa-solid fa-location-crosshairs text-brand-600 dark:text-brand-400 mr-1"></i> Destination
                     </label>
                     <div class="relative">
-                        <select name="destination" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-3 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition">
+                        <select name="destination" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-3 text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
                             <option value="">Select Destination City</option>
                             {% for city in cities %}
                                 <option value="{{ city }}">{{ city }}</option>
@@ -55,15 +55,15 @@
 
                 <!-- Date of Journey -->
                 <div class="text-left">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                        <i class="fa-regular fa-calendar-days text-brand-600 mr-1"></i> Date of Travel
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+                        <i class="fa-regular fa-calendar-days text-brand-600 dark:text-brand-400 mr-1"></i> Date of Travel
                     </label>
-                    <input type="date" name="travel_date" value="{{ today_date }}" min="{{ today_date }}" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-3 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition">
+                    <input type="date" name="travel_date" value="{{ today_date }}" min="{{ today_date }}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-3 text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
                 </div>
 
                 <!-- Submit Button -->
                 <div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-rose-600 text-white font-semibold py-3.5 px-6 rounded-xl hover:from-brand-700 hover:to-rose-700 shadow-md shadow-brand-500/25 transition duration-200 flex items-center justify-center space-x-2">
+                    <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-700 hover:to-rose-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md shadow-brand-500/25 transition duration-200 flex items-center justify-center space-x-2">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <span>Search Buses</span>
                     </button>
@@ -71,70 +71,70 @@
             </form>
 
             <!-- Quick Filter Badges -->
-            <div class="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-slate-100 text-xs text-slate-500">
-                <span class="font-medium text-slate-600">Popular Corridors:</span>
-                <a href="{{ url_for('trips', source='Bangalore', destination='Hyderabad') }}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-rose-50 hover:text-brand-600 transition">Bangalore &rarr; Hyderabad</a>
-                <a href="{{ url_for('trips', source='Mumbai', destination='Goa') }}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-rose-50 hover:text-brand-600 transition">Mumbai &rarr; Goa</a>
-                <a href="{{ url_for('trips', source='Delhi', destination='Jaipur') }}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-rose-50 hover:text-brand-600 transition">Delhi &rarr; Jaipur</a>
-                <a href="{{ url_for('trips', source='Bangalore', destination='Chennai') }}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-rose-50 hover:text-brand-600 transition">Bangalore &rarr; Chennai</a>
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+                <span class="font-semibold text-slate-700 dark:text-slate-300">Popular Corridors:</span>
+                <a href="{{ url_for('trips', source='Bangalore', destination='Hyderabad') }}" class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 transition font-medium">Bangalore &rarr; Hyderabad</a>
+                <a href="{{ url_for('trips', source='Mumbai', destination='Goa') }}" class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 transition font-medium">Mumbai &rarr; Goa</a>
+                <a href="{{ url_for('trips', source='Delhi', destination='Jaipur') }}" class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 transition font-medium">Delhi &rarr; Jaipur</a>
+                <a href="{{ url_for('trips', source='Bangalore', destination='Chennai') }}" class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 transition font-medium">Bangalore &rarr; Chennai</a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Live Stats Row -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+<!-- Key Metrics Row (No negative margins, beautifully spaced) -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl flex-shrink-0">
                 <i class="fa-solid fa-bus-simple"></i>
             </div>
             <div>
-                <p class="text-2xl font-bold text-slate-900">7+</p>
-                <p class="text-xs font-medium text-slate-500">Active Bus Fleets</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white">7+</p>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Fleet Operators</p>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl flex-shrink-0">
                 <i class="fa-solid fa-map-location-dot"></i>
             </div>
             <div>
-                <p class="text-2xl font-bold text-slate-900">10+</p>
-                <p class="text-xs font-medium text-slate-500">Connected Intercity Routes</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white">10+</p>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Connected Corridors</p>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl flex-shrink-0">
                 <i class="fa-solid fa-chair"></i>
             </div>
             <div>
-                <p class="text-2xl font-bold text-slate-900">{{ metrics.total_passengers or '24' }}</p>
-                <p class="text-xs font-medium text-slate-500">Total Booked Seats</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white">{{ metrics.total_passengers or '24' }}</p>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Seats Reserved</p>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl flex-shrink-0">
                 <i class="fa-solid fa-indian-rupee-sign"></i>
             </div>
             <div>
-                <p class="text-2xl font-bold text-slate-900">&#8377;{{ metrics.total_revenue or '10,550' }}</p>
-                <p class="text-xs font-medium text-slate-500">Total Gross Sales</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white">&#8377;{{ metrics.total_revenue or '10,550' }}</p>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Gross Sales Processed</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Featured Departures Section -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-2">
         <div>
-            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Today's Featured Departures</h2>
-            <p class="text-sm text-slate-500 mt-1">Real-time availability directly queried from relational tables</p>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Today's Featured Departures</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Real-time live departures with instant seat confirmation</p>
         </div>
-        <a href="{{ url_for('trips') }}" class="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center space-x-1 mt-2 md:mt-0">
+        <a href="{{ url_for('trips') }}" class="text-sm font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center space-x-1">
             <span>View All Schedules</span>
             <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
@@ -142,51 +142,53 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {% for trip in popular_trips %}
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-md transition">
-            <div class="flex items-start justify-between">
-                <div>
-                    <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-brand-700 mb-2">
-                        {{ trip.bus_type }}
-                    </span>
-                    <h3 class="text-lg font-bold text-slate-900">{{ trip.operator_name }}</h3>
-                    <p class="text-xs text-slate-500 font-mono">{{ trip.bus_number }}</p>
-                </div>
-                <div class="text-right">
-                    <span class="text-2xl font-black text-slate-900">&#8377;{{ trip.fare }}</span>
-                    <span class="block text-[11px] text-slate-400">per passenger</span>
-                </div>
-            </div>
-
-            <!-- Route and Time Info -->
-            <div class="mt-6 flex items-center justify-between border-t border-b border-slate-100 py-4">
-                <div>
-                    <p class="text-xl font-bold text-slate-900">{{ trip.departure_time }}</p>
-                    <p class="text-xs font-semibold text-slate-600">{{ trip.source_city }}</p>
-                </div>
-                <div class="flex-1 px-4 text-center">
-                    <p class="text-[11px] font-medium text-slate-400">{{ trip.estimated_duration_hours }} hrs &bull; {{ trip.distance_km }} km</p>
-                    <div class="relative flex items-center justify-center my-1">
-                        <div class="h-0.5 w-full bg-slate-200"></div>
-                        <i class="fa-solid fa-bus text-brand-600 absolute bg-white px-2 text-xs"></i>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 hover:shadow-lg dark:hover:border-slate-700 transition flex flex-col justify-between">
+            <div>
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-rose-50 dark:bg-rose-950/60 text-brand-700 dark:text-rose-300 mb-2">
+                            {{ trip.bus_type }}
+                        </span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ trip.operator_name }}</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">{{ trip.bus_number }}</p>
                     </div>
-                    <span class="text-[10px] text-emerald-600 font-medium">Non-Stop Express</span>
+                    <div class="text-right flex-shrink-0">
+                        <span class="text-2xl font-black text-slate-900 dark:text-white">&#8377;{{ trip.fare }}</span>
+                        <span class="block text-[11px] text-slate-400">per seat</span>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <p class="text-xl font-bold text-slate-900">{{ trip.arrival_time }}</p>
-                    <p class="text-xs font-semibold text-slate-600">{{ trip.destination_city }}</p>
+
+                <!-- Route and Time Info -->
+                <div class="mt-6 flex items-center justify-between border-t border-b border-slate-100 dark:border-slate-800 py-4 gap-2">
+                    <div class="text-left">
+                        <p class="text-xl font-black text-slate-900 dark:text-white">{{ trip.departure_time }}</p>
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-300">{{ trip.source_city }}</p>
+                    </div>
+                    <div class="flex-1 px-4 text-center">
+                        <p class="text-[11px] font-semibold text-slate-400">{{ trip.estimated_duration_hours }} hrs &bull; {{ trip.distance_km }} km</p>
+                        <div class="relative flex items-center justify-center my-1.5">
+                            <div class="h-0.5 w-full bg-slate-200 dark:bg-slate-700"></div>
+                            <i class="fa-solid fa-bus text-brand-600 dark:text-brand-400 absolute bg-white dark:bg-slate-900 px-2 text-xs"></i>
+                        </div>
+                        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">Direct Express</span>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xl font-black text-slate-900 dark:text-white">{{ trip.arrival_time }}</p>
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-300">{{ trip.destination_city }}</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-4 flex items-center justify-between">
+            <div class="mt-5 flex items-center justify-between pt-2">
                 <div class="flex items-center space-x-2">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-700">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400">
                         <i class="fa-solid fa-star text-[10px] mr-1"></i> {{ trip.rating }}
                     </span>
-                    <span class="text-xs font-medium text-emerald-600">
+                    <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                         <i class="fa-solid fa-circle-check text-[10px] mr-1"></i> {{ trip.available_seats }} Seats Left
                     </span>
                 </div>
-                <a href="{{ url_for('book_seat', trip_id=trip.trip_id) }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 shadow-sm transition">
+                <a href="{{ url_for('book_seat', trip_id=trip.trip_id) }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md shadow-brand-500/20 transition">
                     <span>Select Seats</span>
                     <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </a>
@@ -196,56 +198,56 @@
     </div>
 </section>
 
-<!-- DBS Course Specific Highlights Section -->
-<section class="bg-slate-900 text-white py-16">
+<!-- Enterprise Architectural Advantages Section -->
+<section class="bg-slate-900 dark:bg-slate-950 text-white py-16 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-12">
-            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                Academic Course Alignment
+            <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-brand-500/20 text-brand-400 border border-brand-500/30 uppercase tracking-wider">
+                Enterprise Infrastructure
             </span>
-            <h2 class="text-3xl font-bold mt-3">Database Systems Implementation Highlights</h2>
+            <h2 class="text-3xl font-black mt-3">High-Performance Transactional Reliability</h2>
             <p class="text-sm text-slate-400 mt-2">
-                Designed to directly satisfy all technical requirements outlined in the DBS Project instructions.
+                Engineered for ACID reliability, real-time inventory locking, and granular revenue intelligence.
             </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700">
+            <div class="bg-slate-800/80 dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-700 dark:border-slate-800">
                 <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg mb-4">
-                    <i class="fa-solid fa-database"></i>
+                    <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h3 class="text-lg font-bold">Relational Schema & 3NF</h3>
+                <h3 class="text-lg font-bold">Relational Integrity & 3NF</h3>
                 <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                    6 normalized relational tables (Users, Buses, Routes, Trips, Bookings, Passengers) with Primary Keys, Foreign Keys, NOT NULL, UNIQUE pairs, and CHECK constraints.
+                    Strict entity boundaries eliminating update anomalies and data redundancy across fleet inventory, scheduled corridors, and passenger manifests.
                 </p>
-                <a href="{{ url_for('schema_viewer') }}" class="inline-block mt-4 text-xs font-semibold text-rose-400 hover:text-rose-300">
-                    Explore ER Diagram &rarr;
+                <a href="{{ url_for('schema_viewer') }}" class="inline-block mt-4 text-xs font-bold text-rose-400 hover:text-rose-300">
+                    View Data Model &rarr;
                 </a>
             </div>
 
-            <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700">
+            <div class="bg-slate-800/80 dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-700 dark:border-slate-800">
                 <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg mb-4">
-                    <i class="fa-solid fa-code"></i>
+                    <i class="fa-solid fa-terminal"></i>
                 </div>
-                <h3 class="text-lg font-bold">Interactive SQL Query Lab</h3>
+                <h3 class="text-lg font-bold">Live Query Studio</h3>
                 <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Live console to execute and observe real queries: WHERE filters, ORDER BY, Aggregates (COUNT, SUM, AVG), GROUP BY, HAVING, 5-table JOINs, subqueries, and views.
+                    Direct SQL query inspection studio with live execution statistics, aggregate calculations, multi-table joins, and real-time execution duration meters.
                 </p>
-                <a href="{{ url_for('sql_lab') }}" class="inline-block mt-4 text-xs font-semibold text-sky-400 hover:text-sky-300">
-                    Launch SQL Console &rarr;
+                <a href="{{ url_for('sql_lab') }}" class="inline-block mt-4 text-xs font-bold text-sky-400 hover:text-sky-300">
+                    Launch Query Studio &rarr;
                 </a>
             </div>
 
-            <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700">
+            <div class="bg-slate-800/80 dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-700 dark:border-slate-800">
                 <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg mb-4">
                     <i class="fa-solid fa-chart-line"></i>
                 </div>
-                <h3 class="text-lg font-bold">Reporting & Aggregation</h3>
+                <h3 class="text-lg font-bold">Revenue Intelligence</h3>
                 <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Automated generation of business summaries: Fleet occupancy calculations, route revenue rankings, and booking status breakdowns with Chart.js visualizations.
+                    Instant fleet capacity calculations, corridor revenue rankings, and booking status breakdowns with interactive Chart.js visualizations.
                 </p>
-                <a href="{{ url_for('admin_reports') }}" class="inline-block mt-4 text-xs font-semibold text-emerald-400 hover:text-emerald-300">
-                    View Reports &rarr;
+                <a href="{{ url_for('admin_reports') }}" class="inline-block mt-4 text-xs font-bold text-emerald-400 hover:text-emerald-300">
+                    View Insights &rarr;
                 </a>
             </div>
         </div>

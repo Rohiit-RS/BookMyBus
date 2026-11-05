@@ -1,36 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Relational Schema & ER Diagram - DBS Project{% endblock %}
+{% block title %}System Architecture & Data Model - BookMyBus{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-semibold mb-2">
-                <i class="fa-solid fa-diagram-project text-rose-400"></i>
-                <span>Database Design & Theoretical Foundation (PDF Tasks #5, #6, #7, #12)</span>
+            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 dark:bg-slate-800 text-white text-[11px] font-bold mb-2 border border-slate-700">
+                <i class="fa-solid fa-diagram-project text-brand-500"></i>
+                <span>Relational Architecture Specification</span>
             </div>
-            <h1 class="text-2xl font-bold text-slate-900">Entity-Relationship Diagram & Relational Schema</h1>
-            <p class="text-sm text-slate-500 mt-0.5">Comprehensive architectural documentation for the Bus Reservation System in 3NF.</p>
+            <h1 class="text-2xl font-black text-slate-900 dark:text-white">Entity-Relationship Architecture & 3NF Schema</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">High-reliability relational data design for the BookMyBus transactional platform.</p>
         </div>
 
-        <a href="{{ url_for('sql_lab') }}" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition inline-flex items-center space-x-1.5 shadow-sm">
+        <a href="{{ url_for('sql_lab') }}" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition inline-flex items-center space-x-1.5 shadow-sm">
             <i class="fa-solid fa-terminal"></i>
-            <span>Test Queries in SQL Lab</span>
+            <span>Test in Query Studio</span>
         </a>
     </div>
 
     <!-- 1. Interactive ER Diagram Section -->
-    <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm mb-12">
-        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm mb-12 transition-colors duration-200">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-6">
             <div>
-                <h2 class="text-lg font-bold text-slate-900">1. Entity-Relationship (ER) Diagram</h2>
-                <p class="text-xs text-slate-400">Cardinality notations: One-to-Many (1:N) relationships and associative entities</p>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white">1. Entity-Relationship (ER) Architecture</h2>
+                <p class="text-xs text-slate-400">Cardinality mapping: One-to-Many (1:N) relationships and associative reservation records</p>
             </div>
-            <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">Chen / Crow's Foot</span>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Crow's Foot Notation</span>
         </div>
 
-        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 overflow-x-auto flex justify-center">
+        <div class="bg-slate-50 dark:bg-slate-950/70 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 overflow-x-auto flex justify-center">
             <pre class="mermaid text-center">
 erDiagram
     USERS ||--o{ BOOKINGS : "places (1:N)"
@@ -101,21 +101,21 @@ erDiagram
     </div>
 
     <!-- 2. Relational Schema Specification -->
-    <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm mb-12">
-        <div class="pb-4 border-b border-slate-100 mb-6">
-            <h2 class="text-lg font-bold text-slate-900">2. Relational Schema & Integrity Constraints</h2>
-            <p class="text-xs text-slate-400">Formal table definitions with Primary Keys, Foreign Keys, NOT NULL, UNIQUE, and CHECK constraints.</p>
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm mb-12 transition-colors duration-200">
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800 mb-6">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">2. Relational Schema & Constraints</h2>
+            <p class="text-xs text-slate-400">Formal relation structures with Primary Keys, Foreign Keys, NOT NULL, UNIQUE, and CHECK constraints.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
             <!-- Users -->
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="font-mono font-bold text-slate-900 text-sm">users</span>
-                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">Master Entity</span>
+            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+                <div class="flex justify-between items-center mb-2.5">
+                    <span class="font-mono font-bold text-slate-900 dark:text-white text-sm">users</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 font-bold text-[10px]">User Account Entity</span>
                 </div>
-                <ul class="space-y-1 font-mono text-slate-600">
-                    <li><strong class="text-rose-600">user_id</strong> (INTEGER, PRIMARY KEY)</li>
+                <ul class="space-y-1.5 font-mono text-slate-600 dark:text-slate-400">
+                    <li><strong class="text-rose-600 dark:text-rose-400">user_id</strong> (INTEGER, PRIMARY KEY)</li>
                     <li><strong>full_name</strong> (VARCHAR(100), NOT NULL)</li>
                     <li><strong>email</strong> (VARCHAR(120), UNIQUE, NOT NULL)</li>
                     <li><strong>phone</strong> (VARCHAR(20), NOT NULL)</li>
@@ -125,13 +125,13 @@ erDiagram
             </div>
 
             <!-- Buses -->
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="font-mono font-bold text-slate-900 text-sm">buses</span>
-                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">Fleet Entity</span>
+            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+                <div class="flex justify-between items-center mb-2.5">
+                    <span class="font-mono font-bold text-slate-900 dark:text-white text-sm">buses</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 font-bold text-[10px]">Fleet Master</span>
                 </div>
-                <ul class="space-y-1 font-mono text-slate-600">
-                    <li><strong class="text-rose-600">bus_id</strong> (INTEGER, PRIMARY KEY)</li>
+                <ul class="space-y-1.5 font-mono text-slate-600 dark:text-slate-400">
+                    <li><strong class="text-rose-600 dark:text-rose-400">bus_id</strong> (INTEGER, PRIMARY KEY)</li>
                     <li><strong>bus_number</strong> (VARCHAR(30), UNIQUE, NOT NULL)</li>
                     <li><strong>operator_name</strong> (VARCHAR(100), NOT NULL)</li>
                     <li><strong>bus_type</strong> (CHECK IN ('AC Sleeper', 'Volvo Multi-Axle', ...))</li>
@@ -141,52 +141,49 @@ erDiagram
             </div>
 
             <!-- Routes -->
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="font-mono font-bold text-slate-900 text-sm">routes</span>
-                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">Network Entity</span>
+            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+                <div class="flex justify-between items-center mb-2.5">
+                    <span class="font-mono font-bold text-slate-900 dark:text-white text-sm">routes</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 font-bold text-[10px]">Corridor Network</span>
                 </div>
-                <ul class="space-y-1 font-mono text-slate-600">
-                    <li><strong class="text-rose-600">route_id</strong> (INTEGER, PRIMARY KEY)</li>
+                <ul class="space-y-1.5 font-mono text-slate-600 dark:text-slate-400">
+                    <li><strong class="text-rose-600 dark:text-rose-400">route_id</strong> (INTEGER, PRIMARY KEY)</li>
                     <li><strong>source_city</strong> (VARCHAR(80), NOT NULL)</li>
                     <li><strong>destination_city</strong> (VARCHAR(80), NOT NULL)</li>
                     <li><strong>distance_km</strong> (NUMERIC, CHECK > 0)</li>
                     <li><strong>estimated_duration_hours</strong> (NUMERIC, CHECK > 0)</li>
-                    <li><span class="text-amber-700">UNIQUE (source_city, destination_city)</span></li>
-                    <li><span class="text-amber-700">CHECK (source_city <> destination_city)</span></li>
+                    <li><span class="text-amber-700 dark:text-amber-400">UNIQUE (source_city, destination_city)</span></li>
                 </ul>
             </div>
 
             <!-- Trips -->
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="font-mono font-bold text-slate-900 text-sm">trips</span>
-                    <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold text-[10px]">Associative Entity</span>
+            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+                <div class="flex justify-between items-center mb-2.5">
+                    <span class="font-mono font-bold text-slate-900 dark:text-white text-sm">trips</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 font-bold text-[10px]">Departure Dispatch</span>
                 </div>
-                <ul class="space-y-1 font-mono text-slate-600">
-                    <li><strong class="text-rose-600">trip_id</strong> (INTEGER, PRIMARY KEY)</li>
-                    <li><strong class="text-indigo-600">bus_id</strong> (FK &rarr; buses.bus_id, CASCADE)</li>
-                    <li><strong class="text-indigo-600">route_id</strong> (FK &rarr; routes.route_id, CASCADE)</li>
+                <ul class="space-y-1.5 font-mono text-slate-600 dark:text-slate-400">
+                    <li><strong class="text-rose-600 dark:text-rose-400">trip_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong class="text-indigo-600 dark:text-indigo-400">bus_id</strong> (FK &rarr; buses.bus_id, CASCADE)</li>
+                    <li><strong class="text-indigo-600 dark:text-indigo-400">route_id</strong> (FK &rarr; routes.route_id, CASCADE)</li>
                     <li><strong>trip_date</strong> (DATE, NOT NULL)</li>
                     <li><strong>departure_time</strong> (TIME, NOT NULL)</li>
                     <li><strong>arrival_time</strong> (TIME, NOT NULL)</li>
                     <li><strong>fare</strong> (NUMERIC, CHECK fare > 0)</li>
-                    <li><strong>status</strong> (CHECK IN ('SCHEDULED', 'COMPLETED', 'CANCELLED'))</li>
                 </ul>
             </div>
 
             <!-- Bookings -->
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="font-mono font-bold text-slate-900 text-sm">bookings</span>
-                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Transaction Entity</span>
+            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+                <div class="flex justify-between items-center mb-2.5">
+                    <span class="font-mono font-bold text-slate-900 dark:text-white text-sm">bookings</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Transaction Record</span>
                 </div>
-                <ul class="space-y-1 font-mono text-slate-600">
-                    <li><strong class="text-rose-600">booking_id</strong> (INTEGER, PRIMARY KEY)</li>
+                <ul class="space-y-1.5 font-mono text-slate-600 dark:text-slate-400">
+                    <li><strong class="text-rose-600 dark:text-rose-400">booking_id</strong> (INTEGER, PRIMARY KEY)</li>
                     <li><strong>pnr_number</strong> (VARCHAR(20), UNIQUE, NOT NULL)</li>
-                    <li><strong class="text-indigo-600">user_id</strong> (FK &rarr; users.user_id, RESTRICT)</li>
-                    <li><strong class="text-indigo-600">trip_id</strong> (FK &rarr; trips.trip_id, RESTRICT)</li>
-                    <li><strong>booking_timestamp</strong> (TIMESTAMP, CURRENT_TIMESTAMP)</li>
+                    <li><strong class="text-indigo-600 dark:text-indigo-400">user_id</strong> (FK &rarr; users.user_id, RESTRICT)</li>
+                    <li><strong class="text-indigo-600 dark:text-indigo-400">trip_id</strong> (FK &rarr; trips.trip_id, RESTRICT)</li>
                     <li><strong>total_seats</strong> (INTEGER, CHECK total_seats > 0)</li>
                     <li><strong>total_amount</strong> (NUMERIC, CHECK total_amount >= 0)</li>
                     <li><strong>booking_status</strong> (CHECK IN ('CONFIRMED', 'CANCELLED'))</li>
@@ -194,75 +191,66 @@ erDiagram
             </div>
 
             <!-- Booking Passengers -->
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="font-mono font-bold text-slate-900 text-sm">booking_passengers</span>
-                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Seat Allocation Detail</span>
+            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+                <div class="flex justify-between items-center mb-2.5">
+                    <span class="font-mono font-bold text-slate-900 dark:text-white text-sm">booking_passengers</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Seat Allocation Manifest</span>
                 </div>
-                <ul class="space-y-1 font-mono text-slate-600">
-                    <li><strong class="text-rose-600">ticket_id</strong> (INTEGER, PRIMARY KEY)</li>
-                    <li><strong class="text-indigo-600">booking_id</strong> (FK &rarr; bookings.booking_id, CASCADE)</li>
+                <ul class="space-y-1.5 font-mono text-slate-600 dark:text-slate-400">
+                    <li><strong class="text-rose-600 dark:text-rose-400">ticket_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong class="text-indigo-600 dark:text-indigo-400">booking_id</strong> (FK &rarr; bookings.booking_id, CASCADE)</li>
                     <li><strong>seat_number</strong> (INTEGER, CHECK > 0 AND <= 60)</li>
                     <li><strong>passenger_name</strong> (VARCHAR(100), NOT NULL)</li>
                     <li><strong>passenger_age</strong> (INTEGER, CHECK >= 1 AND <= 120)</li>
                     <li><strong>passenger_gender</strong> (CHECK IN ('Male', 'Female', 'Other'))</li>
-                    <li><span class="text-amber-700">UNIQUE (booking_id, seat_number)</span></li>
+                    <li><span class="text-amber-700 dark:text-amber-400">UNIQUE (booking_id, seat_number)</span></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- 3. Normalization Walkthrough (1NF, 2NF, 3NF) -->
-    <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm mb-12">
-        <div class="pb-4 border-b border-slate-100 mb-6">
-            <h2 class="text-lg font-bold text-slate-900">3. Normalization Analysis (1NF &rarr; 2NF &rarr; 3NF)</h2>
+    <!-- 3. Normalization Walkthrough (3NF) -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm mb-12 transition-colors duration-200">
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800 mb-6">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">3. Third Normal Form (3NF) Architecture</h2>
             <p class="text-xs text-slate-400">Elimination of redundant storage, insertion anomalies, update anomalies, and deletion anomalies.</p>
         </div>
 
-        <div class="space-y-6 text-xs text-slate-600 leading-relaxed">
-            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-                <h4 class="font-bold text-slate-900 text-sm mb-2 text-rose-700">First Normal Form (1NF) - Atomicity</h4>
+        <div class="space-y-4 text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60">
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1 text-rose-700 dark:text-rose-400">1NF - Atomic Tuples</h4>
                 <p>
-                    <strong>Requirement:</strong> Each attribute must hold atomic (indivisible) values, and no repeating groups exist.
-                </p>
-                <p class="mt-2 text-slate-500">
-                    <strong>Implementation:</strong> In a legacy flat system, multiple passenger names and seats might be comma-separated strings inside a single booking record. In our schema, passenger allocations are completely extracted into individual atomic rows in the <code class="font-mono font-bold text-slate-800">booking_passengers</code> table. Each row stores exactly one passenger name, age, gender, and seat number.
+                    Every attribute contains strictly atomic values without multi-valued or repeating lists. Multi-seat passenger bookings are separated into individual rows in <code class="font-mono font-bold text-slate-800 dark:text-slate-200">booking_passengers</code>.
                 </p>
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-                <h4 class="font-bold text-slate-900 text-sm mb-2 text-sky-700">Second Normal Form (2NF) - No Partial Dependency</h4>
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60">
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1 text-sky-700 dark:text-sky-400">2NF - Full Functional Dependency</h4>
                 <p>
-                    <strong>Requirement:</strong> Must be in 1NF, and all non-key attributes must be fully functionally dependent on the entire primary key (no partial dependencies on a subset of a composite key).
-                </p>
-                <p class="mt-2 text-slate-500">
-                    <strong>Implementation:</strong> Rather than using a composite primary key like <code class="font-mono">(bus_number, source_city, trip_date)</code> where route details (distance, duration) only depend on the source and destination, we decomposed the schema into independent entities with surrogate primary keys (<code class="font-mono">bus_id</code>, <code class="font-mono">route_id</code>, <code class="font-mono">trip_id</code>). Route distance depends solely on <code class="font-mono">route_id</code>, not on the trip or bus.
+                    All non-key attributes depend fully on the primary key, eliminating partial dependencies. Corridors and vehicle profiles are segregated from individual departure timetables.
                 </p>
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-                <h4 class="font-bold text-slate-900 text-sm mb-2 text-emerald-700">Third Normal Form (3NF) - No Transitive Dependency</h4>
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60">
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1 text-emerald-700 dark:text-emerald-400">3NF - No Transitive Dependencies</h4>
                 <p>
-                    <strong>Requirement:</strong> Must be in 2NF, and no non-key attribute is transitively dependent on the primary key ($X \rightarrow Y$ and $Y \rightarrow Z$ where $X$ is the primary key).
-                </p>
-                <p class="mt-2 text-slate-500">
-                    <strong>Implementation:</strong> In the <code class="font-mono font-bold text-slate-800">trips</code> table, we store only <code class="font-mono">route_id</code> and <code class="font-mono">bus_id</code>. We do not store <code class="font-mono">operator_name</code> or <code class="font-mono">distance_km</code> in trips, because that would create a transitive dependency (<code class="font-mono">trip_id &rarr; bus_id &rarr; operator_name</code>). Whenever trip details are required, we query via relational JOINs or pre-defined views (<code class="font-mono">vw_trip_schedule</code>).
+                    No non-key attribute depends transitively on the primary key ($X \rightarrow Y$ and $Y \rightarrow Z$). The <code class="font-mono font-bold text-slate-800 dark:text-slate-200">trips</code> table records only foreign keys (<code class="font-mono">bus_id</code>, <code class="font-mono">route_id</code>), preventing replication of coach operators or distance attributes.
                 </p>
             </div>
         </div>
     </div>
 
     <!-- 4. Raw SQL Scripts Tabs -->
-    <div class="bg-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl">
+    <div class="bg-slate-900 dark:bg-slate-950 text-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-800">
         <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
             <div>
-                <h2 class="text-lg font-bold">4. Database SQL Source Scripts</h2>
-                <p class="text-xs text-slate-400">Pure PostgreSQL DDL & DML files ready for course submission</p>
+                <h2 class="text-lg font-bold">4. Database Source DDL & DML Scripts</h2>
+                <p class="text-xs text-slate-400">Pure PostgreSQL definitions and queries powering the platform</p>
             </div>
             <div class="flex space-x-2 text-xs">
-                <button onclick="showSqlTab('schema')" id="btnTabSchema" class="px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition">schema.sql</button>
-                <button onclick="showSqlTab('seed')" id="btnTabSeed" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition">seed.sql</button>
-                <button onclick="showSqlTab('queries')" id="btnTabQueries" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition">queries.sql</button>
+                <button onclick="showSqlTab('schema')" id="btnTabSchema" class="px-3.5 py-1.5 rounded-xl bg-brand-600 text-white font-bold transition">schema.sql</button>
+                <button onclick="showSqlTab('seed')" id="btnTabSeed" class="px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition">seed.sql</button>
+                <button onclick="showSqlTab('queries')" id="btnTabQueries" class="px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition">queries.sql</button>
             </div>
         </div>
 
@@ -282,19 +270,19 @@ erDiagram
         document.getElementById('codeSeed').classList.add('hidden');
         document.getElementById('codeQueries').classList.add('hidden');
 
-        document.getElementById('btnTabSchema').className = "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
-        document.getElementById('btnTabSeed').className = "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
-        document.getElementById('btnTabQueries').className = "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
+        document.getElementById('btnTabSchema').className = "px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
+        document.getElementById('btnTabSeed').className = "px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
+        document.getElementById('btnTabQueries').className = "px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
 
         if (tab === 'schema') {
             document.getElementById('codeSchema').classList.remove('hidden');
-            document.getElementById('btnTabSchema').className = "px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition";
+            document.getElementById('btnTabSchema').className = "px-3.5 py-1.5 rounded-xl bg-brand-600 text-white font-bold transition";
         } else if (tab === 'seed') {
             document.getElementById('codeSeed').classList.remove('hidden');
-            document.getElementById('btnTabSeed').className = "px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition";
+            document.getElementById('btnTabSeed').className = "px-3.5 py-1.5 rounded-xl bg-brand-600 text-white font-bold transition";
         } else if (tab === 'queries') {
             document.getElementById('codeQueries').classList.remove('hidden');
-            document.getElementById('btnTabQueries').className = "px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition";
+            document.getElementById('btnTabQueries').className = "px-3.5 py-1.5 rounded-xl bg-brand-600 text-white font-bold transition";
         }
     }
 </script>

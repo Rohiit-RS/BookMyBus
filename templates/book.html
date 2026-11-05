@@ -5,35 +5,35 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
-    <div class="flex items-center space-x-2 text-xs text-slate-500 mb-6">
-        <a href="{{ url_for('index') }}" class="hover:text-brand-600">Home</a>
+    <div class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mb-6 font-medium">
+        <a href="{{ url_for('index') }}" class="hover:text-brand-600 dark:hover:text-brand-400">Home</a>
         <i class="fa-solid fa-chevron-right text-[10px]"></i>
-        <a href="{{ url_for('trips') }}" class="hover:text-brand-600">Bus Schedules</a>
+        <a href="{{ url_for('trips') }}" class="hover:text-brand-600 dark:hover:text-brand-400">Bus Schedules</a>
         <i class="fa-solid fa-chevron-right text-[10px]"></i>
-        <span class="text-slate-800 font-semibold">Seat Selection</span>
+        <span class="text-slate-800 dark:text-slate-200 font-bold">Seat Selection</span>
     </div>
 
     <!-- Trip Header Card -->
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 mb-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors duration-200">
         <div>
             <div class="flex items-center space-x-2">
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-brand-700">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-50 dark:bg-rose-950/60 text-brand-700 dark:text-rose-300">
                     {{ trip.bus_type }}
                 </span>
-                <span class="text-xs text-slate-400 font-mono">{{ trip.bus_number }}</span>
+                <span class="text-xs text-slate-400 dark:text-slate-500 font-mono">{{ trip.bus_number }}</span>
             </div>
-            <h2 class="text-2xl font-bold text-slate-900 mt-1">{{ trip.operator_name }}</h2>
-            <p class="text-sm text-slate-600 mt-1">
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white mt-1.5">{{ trip.operator_name }}</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1 font-medium">
                 <strong>{{ trip.source_city }}</strong> &rarr; <strong>{{ trip.destination_city }}</strong> 
                 &bull; {{ trip.trip_date }} at {{ trip.departure_time }}
             </p>
         </div>
 
-        <div class="flex items-center space-x-6 text-right">
+        <div class="flex items-center space-x-6 text-left md:text-right">
             <div>
-                <span class="text-xs uppercase text-slate-400 font-semibold block">Ticket Price</span>
-                <span class="text-3xl font-black text-slate-900">&#8377;{{ trip.fare }}</span>
-                <span class="text-xs text-slate-400 block">/ seat</span>
+                <span class="text-xs uppercase text-slate-400 dark:text-slate-500 font-bold tracking-wider block">Tariff</span>
+                <span class="text-3xl font-black text-slate-900 dark:text-white">&#8377;{{ trip.fare }}</span>
+                <span class="text-xs text-slate-400 block font-medium">/ passenger</span>
             </div>
         </div>
     </div>
@@ -41,28 +41,28 @@
     <!-- Booking Layout Form -->
     <form action="{{ url_for('book_seat', trip_id=trip.trip_id) }}" method="POST" id="bookingForm">
         <input type="hidden" name="selected_seats" id="selectedSeatsInput" value="">
-        <input type="hidden" name="user_id" value="2"> <!-- Defaulting to demo passenger Rohit Sharma -->
+        <input type="hidden" name="user_id" value="2">
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Left Column: Bus Seat Layout (6 cols) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left Column: Bus Seat Layout (7 cols) -->
             <div class="lg:col-span-7">
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-                        <h3 class="font-bold text-slate-900">Select Your Seat(s)</h3>
-                        <div class="flex items-center space-x-4 text-xs">
-                            <span class="flex items-center"><span class="w-3.5 h-3.5 rounded border border-slate-300 bg-white mr-1.5"></span> Available</span>
-                            <span class="flex items-center"><span class="w-3.5 h-3.5 rounded bg-brand-600 mr-1.5"></span> Selected</span>
-                            <span class="flex items-center"><span class="w-3.5 h-3.5 rounded bg-slate-300 mr-1.5"></span> Booked</span>
+                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-6 gap-3">
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">Select Preferred Seat(s)</h3>
+                        <div class="flex items-center space-x-4 text-xs font-semibold">
+                            <span class="flex items-center text-slate-600 dark:text-slate-300"><span class="w-3.5 h-3.5 rounded border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 mr-1.5"></span> Available</span>
+                            <span class="flex items-center text-slate-600 dark:text-slate-300"><span class="w-3.5 h-3.5 rounded bg-brand-600 mr-1.5"></span> Selected</span>
+                            <span class="flex items-center text-slate-600 dark:text-slate-300"><span class="w-3.5 h-3.5 rounded bg-slate-300 dark:bg-slate-700 mr-1.5"></span> Booked</span>
                         </div>
                     </div>
 
                     <!-- Bus Cabin Diagram Container -->
-                    <div class="max-w-md mx-auto bg-slate-100 rounded-3xl p-6 border-2 border-slate-200">
+                    <div class="max-w-md mx-auto bg-slate-100 dark:bg-slate-950/80 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 shadow-inner">
                         <!-- Driver Cabin Graphic -->
-                        <div class="flex justify-between items-center pb-6 border-b-2 border-dashed border-slate-300 mb-6 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                            <span>Front Cabin / Entry</span>
-                            <span class="flex items-center space-x-1">
-                                <i class="fa-solid fa-dharmachakra text-slate-600 text-lg"></i>
+                        <div class="flex justify-between items-center pb-5 border-b-2 border-dashed border-slate-300 dark:border-slate-700 mb-6 text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider">
+                            <span>Entry / Front Cabin</span>
+                            <span class="flex items-center space-x-1.5 text-slate-700 dark:text-slate-300">
+                                <i class="fa-solid fa-dharmachakra text-lg"></i>
                                 <span>Driver</span>
                             </span>
                         </div>
@@ -71,26 +71,25 @@
                         <div class="grid grid-cols-4 gap-3">
                             {% for seat_num in range(1, total_seats + 1) %}
                                 {% set is_booked = seat_num in booked_seats %}
-                                <!-- Insert aisle gap between column 2 and 3 -->
                                 <button type="button" 
                                     data-seat="{{ seat_num }}"
                                     onclick="toggleSeat(this, {{ seat_num }})"
                                     class="seat-btn h-12 rounded-xl flex flex-col items-center justify-center font-bold text-xs transition duration-150 shadow-sm
                                     {% if is_booked %}
-                                        bg-slate-300 text-slate-500 cursor-not-allowed
+                                        bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-transparent
                                     {% else %}
-                                        bg-white border-2 border-slate-300 hover:border-brand-500 hover:text-brand-600 text-slate-700 cursor-pointer
+                                        bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 hover:border-brand-500 dark:hover:border-brand-500 text-slate-800 dark:text-slate-100 cursor-pointer
                                     {% endif %}"
                                     {% if is_booked %}disabled{% endif %}>
-                                    <i class="fa-solid fa-chair text-sm {% if is_booked %}text-slate-400{% endif %}"></i>
-                                    <span>{{ seat_num }}</span>
+                                    <i class="fa-solid fa-chair text-sm {% if is_booked %}text-slate-400 dark:text-slate-600{% endif %}"></i>
+                                    <span class="mt-0.5">{{ seat_num }}</span>
                                 </button>
                             {% endfor %}
                         </div>
 
                         <!-- Rear of Bus -->
-                        <div class="text-center pt-6 mt-6 border-t-2 border-dashed border-slate-300 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                            Back of Bus / Emergency Exit
+                        <div class="text-center pt-5 mt-6 border-t-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider">
+                            Emergency Exit / Rear
                         </div>
                     </div>
                 </div>
@@ -99,14 +98,14 @@
             <!-- Right Column: Passenger Manifest & Checkout Summary (5 cols) -->
             <div class="lg:col-span-5 space-y-6">
                 <!-- Passenger Info Card -->
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-slate-900 text-base mb-1">Passenger Details</h3>
-                    <p class="text-xs text-slate-500 mb-4">Click seats on the layout to enter passenger info for each seat.</p>
+                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200">
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">Passenger Manifest</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 font-medium">Click available seats on the cabin layout to enter passenger details.</p>
 
-                    <div id="noSeatSelectedNotice" class="p-6 bg-slate-50 rounded-xl text-center border border-dashed border-slate-200">
+                    <div id="noSeatSelectedNotice" class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl text-center border border-dashed border-slate-200 dark:border-slate-700">
                         <i class="fa-regular fa-hand-pointer text-slate-400 text-2xl mb-2"></i>
-                        <p class="text-xs font-semibold text-slate-600">No seat selected yet</p>
-                        <p class="text-[11px] text-slate-400 mt-1">Please pick your preferred seat(s) from the bus layout.</p>
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-300">No seat selected yet</p>
+                        <p class="text-[11px] text-slate-400 mt-1">Please select seats from the layout to proceed.</p>
                     </div>
 
                     <!-- Dynamic Passenger Fields -->
@@ -114,39 +113,39 @@
                 </div>
 
                 <!-- Price Breakdown & Confirmation Card -->
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-slate-900 text-base mb-4">Fare Breakdown</h3>
+                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200">
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base mb-4">Fare Summary</h3>
                     
-                    <div class="space-y-2 text-xs border-b border-slate-100 pb-4">
-                        <div class="flex justify-between text-slate-600">
-                            <span>Base Fare (per seat)</span>
-                            <span class="font-semibold">&#8377;{{ trip.fare }}</span>
+                    <div class="space-y-2.5 text-xs border-b border-slate-100 dark:border-slate-800 pb-4 font-medium">
+                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                            <span>Base Tariff (per passenger)</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200">&#8377;{{ trip.fare }}</span>
                         </div>
-                        <div class="flex justify-between text-slate-600">
-                            <span>Selected Seats</span>
-                            <span id="selectedSeatsLabel" class="font-mono font-bold text-brand-600">None</span>
+                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                            <span>Allocated Seats</span>
+                            <span id="selectedSeatsLabel" class="font-mono font-bold text-brand-600 dark:text-brand-400">None</span>
                         </div>
-                        <div class="flex justify-between text-slate-600">
-                            <span>Number of Passengers</span>
-                            <span id="seatCountLabel" class="font-semibold">0</span>
+                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                            <span>Total Passengers</span>
+                            <span id="seatCountLabel" class="font-bold text-slate-800 dark:text-slate-200">0</span>
                         </div>
-                        <div class="flex justify-between text-slate-600">
-                            <span>Taxes & GST (Included)</span>
-                            <span class="font-semibold">&#8377;0.00</span>
+                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                            <span>Convenience & Tax</span>
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400">FREE</span>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-center py-4">
-                        <span class="text-sm font-bold text-slate-900">Total Payable Amount</span>
-                        <span id="totalAmountLabel" class="text-2xl font-black text-brand-600">&#8377;0.00</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white">Payable Amount</span>
+                        <span id="totalAmountLabel" class="text-2xl font-black text-brand-600 dark:text-brand-400">&#8377;0.00</span>
                     </div>
 
-                    <button type="submit" id="bookSubmitBtn" disabled class="w-full bg-slate-300 text-slate-500 font-bold py-3 px-4 rounded-xl cursor-not-allowed transition duration-200 flex items-center justify-center space-x-2 shadow-sm">
+                    <button type="submit" id="bookSubmitBtn" disabled class="w-full bg-slate-300 dark:bg-slate-800 text-slate-500 dark:text-slate-600 font-bold py-3 px-4 rounded-xl cursor-not-allowed transition duration-200 flex items-center justify-center space-x-2 shadow-sm">
                         <i class="fa-solid fa-lock"></i>
                         <span>Confirm & Reserve Ticket</span>
                     </button>
-                    <p class="text-[11px] text-slate-400 text-center mt-2">
-                        <i class="fa-solid fa-shield-halved text-emerald-500 mr-1"></i> Transaction is ACID compliant with PostgreSQL
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2 font-medium">
+                        <i class="fa-solid fa-shield-halved text-emerald-500 mr-1"></i> Instant inventory lock with encrypted booking confirmation
                     </p>
                 </div>
             </div>
@@ -164,11 +163,11 @@
         if (selectedSeats.has(seatNum)) {
             selectedSeats.delete(seatNum);
             button.classList.remove('bg-brand-600', 'text-white', 'border-brand-600');
-            button.classList.add('bg-white', 'border-slate-300', 'text-slate-700');
+            button.classList.add('bg-white', 'dark:bg-slate-900', 'border-slate-300', 'dark:border-slate-700', 'text-slate-800', 'dark:text-slate-100');
         } else {
             selectedSeats.add(seatNum);
             button.classList.add('bg-brand-600', 'text-white', 'border-brand-600');
-            button.classList.remove('bg-white', 'border-slate-300', 'text-slate-700');
+            button.classList.remove('bg-white', 'dark:bg-slate-900', 'border-slate-300', 'dark:border-slate-700', 'text-slate-800', 'dark:text-slate-100');
         }
         updateBookingState();
     }
@@ -194,7 +193,7 @@
             notice.classList.add('hidden');
         } else {
             btn.disabled = true;
-            btn.className = "w-full bg-slate-300 text-slate-500 font-bold py-3 px-4 rounded-xl cursor-not-allowed transition duration-200 flex items-center justify-center space-x-2 shadow-sm";
+            btn.className = "w-full bg-slate-300 dark:bg-slate-800 text-slate-500 dark:text-slate-600 font-bold py-3 px-4 rounded-xl cursor-not-allowed transition duration-200 flex items-center justify-center space-x-2 shadow-sm";
             notice.classList.remove('hidden');
         }
 
@@ -202,24 +201,24 @@
         container.innerHTML = '';
         seatsArray.forEach(seat => {
             const div = document.createElement('div');
-            div.className = "p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3";
+            div.className = "p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl space-y-3";
             div.innerHTML = `
-                <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-                    <span class="text-xs font-bold text-slate-800"><i class="fa-solid fa-user text-brand-600 mr-1.5"></i> Passenger for Seat #${seat}</span>
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-100 text-brand-800">Seat ${seat}</span>
+                <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-700">
+                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200"><i class="fa-solid fa-user text-brand-600 dark:text-brand-400 mr-1.5"></i> Passenger for Seat #${seat}</span>
+                    <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-brand-100 dark:bg-brand-950/60 text-brand-800 dark:text-brand-300">Seat ${seat}</span>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Full Name</label>
-                    <input type="text" name="passenger_name_${seat}" required placeholder="e.g. Ramesh Kumar" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Full Name</label>
+                    <input type="text" name="passenger_name_${seat}" required placeholder="e.g. Ramesh Kumar" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Age</label>
-                        <input type="number" name="passenger_age_${seat}" required min="1" max="120" value="28" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Age</label>
+                        <input type="number" name="passenger_age_${seat}" required min="1" max="120" value="28" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Gender</label>
-                        <select name="passenger_gender_${seat}" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Gender</label>
+                        <select name="passenger_gender_${seat}" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>

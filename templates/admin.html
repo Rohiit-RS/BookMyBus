@@ -1,208 +1,214 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Fleet & Operations - BookMyBus{% endblock %}
+{% block title %}Fleet Operations & Management - BookMyBus{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-semibold mb-2">
-                <i class="fa-solid fa-lock text-rose-400"></i>
-                <span>Database Administration Portal</span>
+            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 dark:bg-slate-800 text-white text-[11px] font-bold mb-2 border border-slate-700">
+                <i class="fa-solid fa-lock text-brand-500"></i>
+                <span>Operations Administration Console</span>
             </div>
-            <h1 class="text-2xl font-bold text-slate-900">Fleet, Corridors & Schedules</h1>
-            <p class="text-sm text-slate-500 mt-0.5">Directly perform and demonstrate INSERT, UPDATE, and DELETE operations.</p>
+            <h1 class="text-2xl font-black text-slate-900 dark:text-white">Fleet, Corridors & Schedules</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Manage vehicle registries, intercity routes, and departure timetables.</p>
         </div>
 
         <div class="flex items-center space-x-3">
-            <form action="{{ url_for('admin_reset_db') }}" method="POST" onsubmit="return confirm('Reset all tables to standard initial seed data?')">
-                <button type="submit" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-brand-700 text-xs font-bold transition inline-flex items-center space-x-1.5 border border-rose-200">
+            <form action="{{ url_for('admin_reset_db') }}" method="POST" onsubmit="return confirm('Restore sample fleet and booking data?')">
+                <button type="submit" class="px-4 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 text-brand-700 dark:text-rose-300 text-xs font-bold transition inline-flex items-center space-x-1.5 border border-rose-200 dark:border-rose-900">
                     <i class="fa-solid fa-rotate"></i>
-                    <span>Reset Database (Seed)</span>
+                    <span>Refresh Sample Data</span>
                 </button>
             </form>
-            <a href="{{ url_for('admin_reports') }}" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition inline-flex items-center space-x-1.5">
+            <a href="{{ url_for('admin_reports') }}" class="px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-xs font-bold hover:bg-slate-800 dark:hover:bg-slate-700 transition inline-flex items-center space-x-1.5 border border-transparent dark:border-slate-700">
                 <i class="fa-solid fa-chart-column"></i>
-                <span>Analytics Reports</span>
+                <span>Revenue Insights</span>
             </a>
         </div>
     </div>
 
-    <!-- Management Forms Grid (Demonstrating INSERT) -->
+    <!-- Management Forms Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
         <!-- 1. Add Bus Form -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <div class="flex items-center space-x-2 pb-4 border-b border-slate-100 mb-4">
-                <div class="w-8 h-8 rounded-lg bg-rose-50 text-brand-600 flex items-center justify-center text-sm">
-                    <i class="fa-solid fa-bus"></i>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center space-x-2.5 pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
+                    <div class="w-8 h-8 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-brand-600 dark:text-rose-400 flex items-center justify-center text-sm flex-shrink-0">
+                        <i class="fa-solid fa-bus"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">Register New Coach</h3>
+                        <p class="text-[11px] text-slate-400">Fleet capacity & vehicle registration</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-sm">Add New Bus (INSERT)</h3>
-                    <p class="text-[11px] text-slate-400">Insert into buses table</p>
-                </div>
-            </div>
 
-            <form action="{{ url_for('admin_add_bus') }}" method="POST" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Registration # (UNIQUE)</label>
-                    <input type="text" name="bus_number" required placeholder="e.g. KA-04-P-9999" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Operator Name</label>
-                    <input type="text" name="operator_name" required placeholder="e.g. SRS Star Luxury" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Bus Category (CHECK)</label>
-                    <select name="bus_type" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                        <option value="AC Sleeper (2+1)">AC Sleeper (2+1)</option>
-                        <option value="Volvo Multi-Axle">Volvo Multi-Axle</option>
-                        <option value="AC Seater (2+2)">AC Seater (2+2)</option>
-                        <option value="Non-AC Seater (2+2)">Non-AC Seater (2+2)</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
+                <form action="{{ url_for('admin_add_bus') }}" method="POST" class="space-y-3 text-xs">
                     <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Seats (1-60)</label>
-                        <input type="number" name="total_seats" value="30" min="1" max="60" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Registration #</label>
+                        <input type="text" name="bus_number" required placeholder="e.g. KA-04-P-9999" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Rating (1-5)</label>
-                        <input type="number" step="0.1" name="rating" value="4.6" min="1.0" max="5.0" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Operator Name</label>
+                        <input type="text" name="operator_name" required placeholder="e.g. Royal Express" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
                     </div>
-                </div>
-                <button type="submit" class="w-full mt-2 bg-brand-600 text-white font-bold py-2.5 rounded-lg hover:bg-brand-700 transition">
-                    + Add Bus Record
-                </button>
-            </form>
+                    <div>
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Category</label>
+                        <select name="bus_type" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <option value="AC Sleeper (2+1)">AC Sleeper (2+1)</option>
+                            <option value="Volvo Multi-Axle">Volvo Multi-Axle</option>
+                            <option value="AC Seater (2+2)">AC Seater (2+2)</option>
+                            <option value="Non-AC Seater (2+2)">Non-AC Seater (2+2)</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Seats (1-60)</label>
+                            <input type="number" name="total_seats" value="30" min="1" max="60" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Rating (1-5)</label>
+                            <input type="number" step="0.1" name="rating" value="4.6" min="1.0" max="5.0" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full mt-2 bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl transition shadow-sm">
+                        + Add Coach
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- 2. Add Route Form -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <div class="flex items-center space-x-2 pb-4 border-b border-slate-100 mb-4">
-                <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center text-sm">
-                    <i class="fa-solid fa-map-pin"></i>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center space-x-2.5 pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
+                    <div class="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 flex items-center justify-center text-sm flex-shrink-0">
+                        <i class="fa-solid fa-map-pin"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">Create Route Corridor</h3>
+                        <p class="text-[11px] text-slate-400">Pair origin and destination cities</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-sm">Add New Route (INSERT)</h3>
-                    <p class="text-[11px] text-slate-400">Insert into routes table</p>
-                </div>
-            </div>
 
-            <form action="{{ url_for('admin_add_route') }}" method="POST" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Origin City</label>
-                    <input type="text" name="source_city" required placeholder="e.g. Coimbatore" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Destination City</label>
-                    <input type="text" name="destination_city" required placeholder="e.g. Bangalore" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
+                <form action="{{ url_for('admin_add_route') }}" method="POST" class="space-y-3 text-xs">
                     <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Distance (km)</label>
-                        <input type="number" step="0.1" name="distance_km" value="380" min="1" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Origin City</label>
+                        <input type="text" name="source_city" required placeholder="e.g. Coimbatore" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Duration (hrs)</label>
-                        <input type="number" step="0.5" name="estimated_duration_hours" value="7.0" min="0.5" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Destination City</label>
+                        <input type="text" name="destination_city" required placeholder="e.g. Bangalore" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
                     </div>
-                </div>
-                <button type="submit" class="w-full mt-4 bg-sky-600 text-white font-bold py-2.5 rounded-lg hover:bg-sky-700 transition">
-                    + Add Route Record
-                </button>
-            </form>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Distance (km)</label>
+                            <input type="number" step="0.1" name="distance_km" value="380" min="1" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Duration (hrs)</label>
+                            <input type="number" step="0.5" name="estimated_duration_hours" value="7.0" min="0.5" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full mt-4 bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl transition shadow-sm">
+                        + Establish Corridor
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- 3. Schedule Trip Form -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <div class="flex items-center space-x-2 pb-4 border-b border-slate-100 mb-4">
-                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
-                    <i class="fa-solid fa-clock"></i>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm transition-colors duration-200 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center space-x-2.5 pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm flex-shrink-0">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">Schedule Journey</h3>
+                        <p class="text-[11px] text-slate-400">Assign coach, timing, and tariff</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-sm">Schedule Trip (FK INSERT)</h3>
-                    <p class="text-[11px] text-slate-400">Links bus_id and route_id</p>
-                </div>
-            </div>
 
-            <form action="{{ url_for('admin_add_trip') }}" method="POST" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Assign Bus (FK)</label>
-                    <select name="bus_id" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                        {% for b in buses %}
-                            <option value="{{ b.bus_id }}">{{ b.operator_name }} ({{ b.bus_number }}) - {{ b.bus_type }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Select Corridor (FK)</label>
-                    <select name="route_id" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                        {% for r in routes %}
-                            <option value="{{ r.route_id }}">{{ r.source_city }} &rarr; {{ r.destination_city }} ({{ r.distance_km }}km)</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
+                <form action="{{ url_for('admin_add_trip') }}" method="POST" class="space-y-3 text-xs">
                     <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Date</label>
-                        <input type="date" name="trip_date" value="{{ today_date }}" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-2">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Assign Coach</label>
+                        <select name="bus_id" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            {% for b in buses %}
+                                <option value="{{ b.bus_id }}">{{ b.operator_name }} ({{ b.bus_number }}) - {{ b.bus_type }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Dep Time</label>
-                        <input type="text" name="departure_time" value="21:00" placeholder="HH:MM" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-2">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Route Corridor</label>
+                        <select name="route_id" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            {% for r in routes %}
+                                <option value="{{ r.route_id }}">{{ r.source_city }} &rarr; {{ r.destination_city }} ({{ r.distance_km }}km)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Date</label>
+                            <input type="date" name="trip_date" value="{{ today_date }}" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-2 py-2">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Dep</label>
+                            <input type="text" name="departure_time" value="21:00" placeholder="HH:MM" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-2 py-2">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Arr</label>
+                            <input type="text" name="arrival_time" value="06:30" placeholder="HH:MM" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-2 py-2">
+                        </div>
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Arr Time</label>
-                        <input type="text" name="arrival_time" value="06:30" placeholder="HH:MM" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-2">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Tariff (&#8377;)</label>
+                        <input type="number" step="10" name="fare" value="1100" min="50" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none">
                     </div>
-                </div>
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Fare (&#8377;)</label>
-                    <input type="number" step="10" name="fare" value="1100" min="50" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-brand-500 focus:outline-none">
-                </div>
-                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-lg hover:bg-emerald-700 transition">
-                    + Schedule Journey
-                </button>
-            </form>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition shadow-sm">
+                        + Publish Schedule
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- Active Schedules Table -->
-    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mb-12">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm mb-12 transition-colors duration-200">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
             <div>
-                <h3 class="font-bold text-slate-900 text-base">Scheduled Trips Master Table (`trips` & `vw_trip_schedule`)</h3>
-                <p class="text-xs text-slate-400">All planned departures with foreign keys resolved</p>
+                <h3 class="font-bold text-slate-900 dark:text-white text-base">Active Departure Schedules</h3>
+                <p class="text-xs text-slate-400">All planned departures with vehicle assignments and fares</p>
             </div>
-            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                 Total: {{ trips|length }}
             </span>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-                <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
                     <tr>
                         <th class="py-3 px-4">Trip ID</th>
                         <th class="py-3 px-4">Route</th>
-                        <th class="py-3 px-4">Operator / Bus</th>
+                        <th class="py-3 px-4">Operator / Coach</th>
                         <th class="py-3 px-4">Date</th>
                         <th class="py-3 px-4">Time</th>
-                        <th class="py-3 px-4">Fare</th>
+                        <th class="py-3 px-4">Tariff</th>
                         <th class="py-3 px-4">Status</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
                     {% for t in trips %}
-                    <tr class="hover:bg-slate-50">
-                        <td class="py-3 px-4 font-mono font-bold text-slate-700">#{{ t.trip_id }}</td>
-                        <td class="py-3 px-4 font-bold text-slate-800">{{ t.source_city }} &rarr; {{ t.destination_city }}</td>
-                        <td class="py-3 px-4">{{ t.operator_name }} <span class="text-slate-400 font-mono">({{ t.bus_number }})</span></td>
-                        <td class="py-3 px-4 text-slate-600">{{ t.trip_date }}</td>
-                        <td class="py-3 px-4 font-medium">{{ t.departure_time }} - {{ t.arrival_time }}</td>
-                        <td class="py-3 px-4 font-bold text-emerald-600">&#8377;{{ t.fare }}</td>
-                        <td class="py-3 px-4">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                        <td class="py-3.5 px-4 font-mono font-bold text-slate-700 dark:text-slate-300">#{{ t.trip_id }}</td>
+                        <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-white">{{ t.source_city }} &rarr; {{ t.destination_city }}</td>
+                        <td class="py-3.5 px-4 text-slate-700 dark:text-slate-300">{{ t.operator_name }} <span class="text-slate-400 font-mono">({{ t.bus_number }})</span></td>
+                        <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">{{ t.trip_date }}</td>
+                        <td class="py-3.5 px-4 font-semibold text-slate-800 dark:text-slate-200">{{ t.departure_time }} - {{ t.arrival_time }}</td>
+                        <td class="py-3.5 px-4 font-bold text-emerald-600 dark:text-emerald-400">&#8377;{{ t.fare }}</td>
+                        <td class="py-3.5 px-4">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
                                 {{ t.trip_status or 'SCHEDULED' }}
                             </span>
                         </td>
@@ -214,20 +220,20 @@
     </div>
 
     <!-- All Bookings Master Table -->
-    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors duration-200">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
             <div>
-                <h3 class="font-bold text-slate-900 text-base">All Reservations Master Table (`bookings`)</h3>
-                <p class="text-xs text-slate-400">Full audit log of passenger tickets and payment statuses</p>
+                <h3 class="font-bold text-slate-900 dark:text-white text-base">Booking Audit & Passenger Manifests</h3>
+                <p class="text-xs text-slate-400">Master record of customer transactions and seat assignments</p>
             </div>
-            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                 Total: {{ bookings|length }}
             </span>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-                <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
                     <tr>
                         <th class="py-3 px-4">PNR</th>
                         <th class="py-3 px-4">Customer</th>
@@ -238,20 +244,20 @@
                         <th class="py-3 px-4">Status</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
                     {% for b in bookings %}
-                    <tr class="hover:bg-slate-50">
-                        <td class="py-3 px-4 font-mono font-bold text-brand-600">{{ b.pnr_number }}</td>
-                        <td class="py-3 px-4">
-                            <p class="font-bold text-slate-800">{{ b.customer_name }}</p>
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                        <td class="py-3.5 px-4 font-mono font-bold text-brand-600 dark:text-brand-400">{{ b.pnr_number }}</td>
+                        <td class="py-3.5 px-4">
+                            <p class="font-bold text-slate-800 dark:text-white">{{ b.customer_name }}</p>
                             <p class="text-[10px] text-slate-400">{{ b.customer_email }}</p>
                         </td>
-                        <td class="py-3 px-4 font-medium">{{ b.source_city }} &rarr; {{ b.destination_city }}</td>
-                        <td class="py-3 px-4 text-slate-600">{{ b.operator_name }}</td>
-                        <td class="py-3 px-4 text-slate-500">{{ b.trip_date }}</td>
-                        <td class="py-3 px-4 font-bold text-slate-800">&#8377;{{ b.total_amount }}</td>
-                        <td class="py-3 px-4">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold {% if b.booking_status == 'CONFIRMED' %}bg-emerald-50 text-emerald-700{% else %}bg-rose-50 text-rose-700{% endif %}">
+                        <td class="py-3.5 px-4 font-semibold text-slate-700 dark:text-slate-300">{{ b.source_city }} &rarr; {{ b.destination_city }}</td>
+                        <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">{{ b.operator_name }}</td>
+                        <td class="py-3.5 px-4 text-slate-500 dark:text-slate-400">{{ b.trip_date }}</td>
+                        <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-white">&#8377;{{ b.total_amount }}</td>
+                        <td class="py-3.5 px-4">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold {% if b.booking_status == 'CONFIRMED' %}bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400{% else %}bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400{% endif %}">
                                 {{ b.booking_status }}
                             </span>
                         </td>

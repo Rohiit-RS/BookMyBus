@@ -8,14 +8,14 @@
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center space-x-2">
             <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
-            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Reservation Confirmed</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Reservation Confirmed & Guaranteed</span>
         </div>
         <div class="space-x-2">
-            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow-sm inline-flex items-center space-x-1.5">
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition shadow-sm inline-flex items-center space-x-1.5">
                 <i class="fa-solid fa-print"></i>
                 <span>Print Ticket</span>
             </button>
-            <a href="{{ url_for('my_bookings') }}" class="px-4 py-2 rounded-xl bg-slate-900 text-xs font-bold text-white hover:bg-slate-800 transition shadow-sm inline-flex items-center space-x-1.5">
+            <a href="{{ url_for('my_bookings') }}" class="px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-700 text-xs font-bold text-white hover:bg-slate-800 dark:hover:bg-slate-600 transition shadow-sm inline-flex items-center space-x-1.5">
                 <i class="fa-solid fa-ticket"></i>
                 <span>My Bookings</span>
             </a>
@@ -23,34 +23,34 @@
     </div>
 
     <!-- Ticket Card (Printable) -->
-    <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xl shadow-slate-200/50">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none transition-colors duration-200">
         <!-- Ticket Header Band -->
         <div class="bg-gradient-to-r from-brand-600 to-rose-600 p-6 md:p-8 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold mb-2">
+                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold mb-2">
                     <i class="fa-solid fa-circle-check text-emerald-300"></i>
-                    <span>E-TICKET / BOARDING PASS</span>
+                    <span>DIGITAL BOARDING PASS</span>
                 </div>
-                <h1 class="text-2xl font-bold tracking-tight">{{ booking.operator_name }}</h1>
+                <h1 class="text-2xl font-black tracking-tight">{{ booking.operator_name }}</h1>
                 <p class="text-xs text-rose-100 font-mono">{{ booking.bus_number }} &bull; {{ booking.bus_type }}</p>
             </div>
             <div class="text-left md:text-right">
-                <span class="text-xs uppercase text-rose-100 font-semibold block">Booking Reference (PNR)</span>
+                <span class="text-xs uppercase text-rose-100 font-bold tracking-wider block">Booking Reference (PNR)</span>
                 <span class="text-3xl font-black font-mono tracking-widest text-white">{{ booking.pnr_number }}</span>
-                <span class="inline-block mt-1 px-2.5 py-0.5 rounded text-[11px] font-bold bg-white text-emerald-700">
+                <span class="inline-block mt-1 px-3 py-0.5 rounded-full text-[11px] font-black bg-white text-emerald-700">
                     STATUS: {{ booking.booking_status }}
                 </span>
             </div>
         </div>
 
         <!-- Journey Route Bar -->
-        <div class="p-6 md:p-8 border-b border-slate-100">
+        <div class="p-6 md:p-8 border-b border-slate-100 dark:border-slate-800">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <!-- Source -->
                 <div>
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Departure</span>
-                    <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ booking.departure_time }}</h3>
-                    <p class="text-sm font-semibold text-slate-700">{{ booking.source_city }}</p>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Departure</span>
+                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">{{ booking.departure_time }}</h3>
+                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ booking.source_city }}</p>
                     <p class="text-xs text-slate-400">{{ booking.trip_date }}</p>
                 </div>
 
@@ -58,31 +58,31 @@
                 <div class="flex-1 text-center px-4">
                     <span class="text-xs font-semibold text-slate-400">{{ booking.estimated_duration_hours }} hrs &bull; {{ booking.distance_km }} km</span>
                     <div class="relative flex items-center justify-center my-2">
-                        <div class="h-0.5 w-full bg-slate-200"></div>
-                        <div class="absolute bg-white px-3 text-brand-600">
+                        <div class="h-0.5 w-full bg-slate-200 dark:bg-slate-700"></div>
+                        <div class="absolute bg-white dark:bg-slate-900 px-3 text-brand-600 dark:text-brand-400">
                             <i class="fa-solid fa-bus text-sm"></i>
                         </div>
                     </div>
-                    <span class="text-[11px] text-emerald-600 font-bold">Confirmed Seat Allocation</span>
+                    <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">Confirmed Reservation</span>
                 </div>
 
                 <!-- Destination -->
                 <div class="text-left md:text-right">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Arrival</span>
-                    <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ booking.arrival_time }}</h3>
-                    <p class="text-sm font-semibold text-slate-700">{{ booking.destination_city }}</p>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Arrival</span>
+                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">{{ booking.arrival_time }}</h3>
+                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ booking.destination_city }}</p>
                     <p class="text-xs text-slate-400">Scheduled Stop</p>
                 </div>
             </div>
         </div>
 
         <!-- Passenger Manifest Table -->
-        <div class="p-6 md:p-8 bg-slate-50/50">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Passenger Manifest & Seats</h4>
+        <div class="p-6 md:p-8 bg-slate-50/50 dark:bg-slate-950/40">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">Passenger Manifest & Seats</h4>
             
-            <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-slate-100 text-slate-600 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                    <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
                         <tr>
                             <th class="py-3 px-4">Seat #</th>
                             <th class="py-3 px-4">Passenger Name</th>
@@ -91,19 +91,19 @@
                             <th class="py-3 px-4 text-right">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 font-medium">
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
                         {% for p in booking.passengers %}
                         <tr>
                             <td class="py-3.5 px-4">
-                                <span class="px-2.5 py-1 rounded-lg bg-brand-50 text-brand-700 font-bold">
+                                <span class="px-2.5 py-1 rounded-lg bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 font-bold">
                                     Seat {{ p.seat_number }}
                                 </span>
                             </td>
-                            <td class="py-3.5 px-4 font-bold text-slate-800">{{ p.passenger_name }}</td>
-                            <td class="py-3.5 px-4 text-slate-600">{{ p.passenger_age }} yrs</td>
-                            <td class="py-3.5 px-4 text-slate-600">{{ p.passenger_gender }}</td>
+                            <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-white">{{ p.passenger_name }}</td>
+                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-300">{{ p.passenger_age }} yrs</td>
+                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-300">{{ p.passenger_gender }}</td>
                             <td class="py-3.5 px-4 text-right">
-                                <span class="text-emerald-600 font-bold"><i class="fa-solid fa-circle-check mr-1 text-[10px]"></i> Confirmed</span>
+                                <span class="text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1 text-[10px]"></i> Confirmed</span>
                             </td>
                         </tr>
                         {% endfor %}
@@ -113,16 +113,16 @@
         </div>
 
         <!-- Ticket Footer & Payment Summary -->
-        <div class="p-6 md:p-8 bg-white border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-            <div class="text-slate-500 space-y-1 text-center md:text-left">
-                <p><strong>Booked By:</strong> {{ booking.customer_name }} ({{ booking.customer_email }})</p>
-                <p><strong>Timestamp:</strong> {{ booking.booking_timestamp }}</p>
-                <p><strong>Payment Method:</strong> Online Card / UPI &bull; <span class="text-emerald-600 font-bold">PAID</span></p>
+        <div class="p-6 md:p-8 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs transition-colors duration-200">
+            <div class="text-slate-500 dark:text-slate-400 space-y-1 text-center md:text-left font-medium">
+                <p><strong>Primary Passenger:</strong> {{ booking.customer_name }} ({{ booking.customer_email }})</p>
+                <p><strong>Booking Timestamp:</strong> {{ booking.booking_timestamp }}</p>
+                <p><strong>Payment Status:</strong> Online Direct &bull; <span class="text-emerald-600 dark:text-emerald-400 font-bold">PAID</span></p>
             </div>
             <div class="text-center md:text-right">
-                <span class="text-xs text-slate-400 uppercase font-semibold block">Gross Amount Paid</span>
-                <span class="text-3xl font-black text-slate-900">&#8377;{{ booking.total_amount }}</span>
-                <span class="text-[11px] text-emerald-600 font-semibold block mt-0.5">Zero Cancellation Fees Available</span>
+                <span class="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider block">Total Amount Paid</span>
+                <span class="text-3xl font-black text-slate-900 dark:text-white">&#8377;{{ booking.total_amount }}</span>
+                <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold block mt-0.5">Flexible Cancellation Enabled</span>
             </div>
         </div>
     </div>

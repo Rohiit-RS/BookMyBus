@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}BookMyBus - Online Bus Reservation System{% endblock %}</title>
-    <!-- Tailwind CSS CDN -->
+    <title>{% block title %}BookMyBus - Premium Intercity Bus & Coach Network{% endblock %}</title>
+    
+    <!-- Theme Initializer (Prevents FOUC) -->
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- Tailwind CSS CDN with dark mode enabled -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -28,22 +39,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Chart.js for Reports -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Mermaid.js for ER Diagrams -->
+    <!-- Mermaid.js for Diagrams -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        code, pre, .font-mono { font-family: 'JetBrains Mono', monospace; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
 
     <!-- Top Navigation Bar -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <nav class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between items-center h-16">
                 <!-- Logo & Brand -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url_for('index') }}" class="flex items-center space-x-2.5">
@@ -51,58 +63,62 @@
                             <i class="fa-solid fa-bus text-lg"></i>
                         </div>
                         <div>
-                            <span class="text-xl font-bold tracking-tight text-slate-900">Book<span class="text-brand-600">My</span>Bus</span>
-                            <span class="block text-[10px] uppercase font-semibold text-slate-400 tracking-wider -mt-1">DBS Project</span>
+                            <span class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">Book<span class="text-brand-600">My</span>Bus</span>
+                            <span class="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 tracking-wider -mt-1 uppercase">Intercity Express</span>
                         </div>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
-                    <a href="{{ url_for('index') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'index' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
-                        <i class="fa-solid fa-house mr-1.5 opacity-70"></i> Home
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-1.5">
+                    <a href="{{ url_for('index') }}" class="px-3 py-2 rounded-xl text-sm font-semibold transition {% if request.endpoint == 'index' %}text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800{% endif %}">
+                        Home
                     </a>
-                    <a href="{{ url_for('trips') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'trips' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
-                        <i class="fa-solid fa-route mr-1.5 opacity-70"></i> Find Buses
+                    <a href="{{ url_for('trips') }}" class="px-3 py-2 rounded-xl text-sm font-semibold transition {% if request.endpoint == 'trips' %}text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800{% endif %}">
+                        Find Buses
                     </a>
-                    <a href="{{ url_for('my_bookings') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'my_bookings' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
-                        <i class="fa-solid fa-ticket mr-1.5 opacity-70"></i> My Bookings
+                    <a href="{{ url_for('my_bookings') }}" class="px-3 py-2 rounded-xl text-sm font-semibold transition {% if request.endpoint == 'my_bookings' %}text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800{% endif %}">
+                        My Bookings
                     </a>
-                    <a href="{{ url_for('admin_reports') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'admin_reports' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
-                        <i class="fa-solid fa-chart-pie mr-1.5 opacity-70"></i> Reports & Analytics
+                    <a href="{{ url_for('admin_reports') }}" class="px-3 py-2 rounded-xl text-sm font-semibold transition {% if request.endpoint == 'admin_reports' %}text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800{% endif %}">
+                        Insights
                     </a>
-                    <a href="{{ url_for('sql_lab') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'sql_lab' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
-                        <span class="relative">
-                            <i class="fa-solid fa-terminal mr-1.5 opacity-70"></i> SQL Lab
-                            <span class="absolute -top-1 -right-2 px-1 py-0.2 bg-emerald-500 text-white text-[9px] rounded-full font-bold">DBS</span>
-                        </span>
+                    <a href="{{ url_for('sql_lab') }}" class="px-3 py-2 rounded-xl text-sm font-semibold transition {% if request.endpoint == 'sql_lab' %}text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800{% endif %}">
+                        Query Studio
                     </a>
-                    <a href="{{ url_for('schema_viewer') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'schema_viewer' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
-                        <i class="fa-solid fa-diagram-project mr-1.5 opacity-70"></i> Schema & ERD
+                    <a href="{{ url_for('schema_viewer') }}" class="px-3 py-2 rounded-xl text-sm font-semibold transition {% if request.endpoint == 'schema_viewer' %}text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800{% endif %}">
+                        Data Model
                     </a>
                 </div>
 
-                <!-- Admin Action -->
-                <div class="flex items-center space-x-3">
-                    <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition shadow-sm">
-                        <i class="fa-solid fa-shield-halved mr-1.5 text-rose-400"></i> Admin Panel
+                <!-- Right Action Controls -->
+                <div class="flex items-center space-x-2.5">
+                    <!-- Light/Dark Mode Toggle Button -->
+                    <button id="themeToggleBtn" onclick="toggleTheme()" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition border border-slate-200 dark:border-slate-800" title="Toggle Theme">
+                        <i id="themeIconSun" class="fa-solid fa-sun text-sm text-amber-500 hidden dark:block"></i>
+                        <i id="themeIconMoon" class="fa-solid fa-moon text-sm text-slate-600 block dark:hidden"></i>
+                    </button>
+
+                    <!-- Fleet Operations Portal -->
+                    <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-900 dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 transition shadow-sm border border-transparent dark:border-slate-700">
+                        <i class="fa-solid fa-sliders mr-1.5 text-brand-500"></i> Fleet Admin
                     </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Flash Messages -->
+    <!-- Global Flash Messages -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="mb-4 p-4 rounded-xl flex items-center justify-between text-sm shadow-sm transition animate-fade-in {% if category == 'error' %}bg-rose-50 border border-rose-200 text-rose-800{% else %}bg-emerald-50 border border-emerald-200 text-emerald-800{% endif %}">
-                        <div class="flex items-center space-x-2.5">
-                            <i class="fa-solid {% if category == 'error' %}fa-circle-exclamation text-rose-600{% else %}fa-circle-check text-emerald-600{% endif %} text-lg"></i>
+                    <div class="mb-4 p-4 rounded-2xl flex items-center justify-between text-sm shadow-sm transition animate-fade-in {% if category == 'error' %}bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200{% else %}bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-900 text-emerald-800 dark:text-emerald-200{% endif %}">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid {% if category == 'error' %}fa-circle-exclamation text-rose-600 dark:text-rose-400{% else %}fa-circle-check text-emerald-600 dark:text-emerald-400{% endif %} text-base"></i>
                             <span class="font-medium">{{ message }}</span>
                         </div>
-                        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-700">
+                        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -111,36 +127,54 @@
         {% endwith %}
     </div>
 
-    <!-- Main Content Block -->
+    <!-- Main Content Body -->
     <main class="flex-grow">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+    <!-- Professional Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-20 transition-colors duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
+                    <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">
                         <i class="fa-solid fa-bus"></i>
                     </div>
                     <div>
-                        <p class="text-sm font-semibold text-slate-800">BookMyBus - Database-Driven Application</p>
-                        <p class="text-xs text-slate-500">Database Systems (DBS) Course Project • Relational 3NF & SQL Queries</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white">BookMyBus Intercity Network</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Enterprise Bus Reservation & Real-Time Fleet Platform</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-6 text-xs text-slate-500">
+
+                <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 dark:text-slate-400">
                     <span class="flex items-center space-x-1.5">
                         <span class="w-2 h-2 rounded-full {% if is_postgres %}bg-emerald-500{% else %}bg-sky-500{% endif %}"></span>
-                        <span>Engine: <strong>{% if is_postgres %}PostgreSQL{% else %}PostgreSQL / SQLite Dual Engine{% endif %}</strong></span>
+                        <span>Engine: <strong class="text-slate-700 dark:text-slate-300">{% if is_postgres %}PostgreSQL Server{% else %}PostgreSQL / SQLite Engine{% endif %}</strong></span>
                     </span>
-                    <a href="{{ url_for('sql_lab') }}" class="hover:text-brand-600 underline">SQL Query Demonstrator</a>
-                    <a href="{{ url_for('schema_viewer') }}" class="hover:text-brand-600 underline">ER Diagram & 3NF Schema</a>
+                    <a href="{{ url_for('sql_lab') }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition font-medium">Query Studio</a>
+                    <a href="{{ url_for('schema_viewer') }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition font-medium">Data Model</a>
+                    <a href="{{ url_for('admin_reports') }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition font-medium">Analytics</a>
                 </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-400 dark:text-slate-500">
+                &copy; {{ current_year }} BookMyBus Inc. All rights reserved. Real-time ACID reservations with instant PNR confirmation.
             </div>
         </div>
     </footer>
 
+    <!-- Theme Toggle Script -->
+    <script>
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        }
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

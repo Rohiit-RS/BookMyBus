@@ -1,16 +1,16 @@
 """
-Bus Reservation System - Flask Web Application
-Course: Database Systems (DBS Project)
-Designed for local execution and Vercel serverless deployment.
+BookMyBus - Enterprise Bus Reservation & Fleet Management Platform
+Architecture: Python + PostgreSQL / Unified Relational Engine
 """
 
 import os
+from urllib.parse import parse_qs, urlencode
 from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import db
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "dbs-bus-reservation-secret-key-2026")
+app.secret_key = os.environ.get("SECRET_KEY", "bookmybus-enterprise-production-key-2026")
 
 # Automatically initialize database on startup
 with app.app_context():
@@ -21,28 +21,33 @@ with app.app_context():
 
 
 class VercelPathFix:
-    """WSGI middleware ensuring proper routing on Vercel serverless deployments."""
+    """WSGI middleware ensuring proper path resolution on Vercel serverless deployments."""
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        path = environ.get('PATH_INFO', '')
-        if path == '/api/index.py' or path == '/api/index.py/':
-            environ['PATH_INFO'] = '/'
-        elif path.startswith('/api/index.py/'):
-            environ['PATH_INFO'] = path[len('/api/index.py'):]
-        elif path.startswith('/api/'):
-            environ['PATH_INFO'] = path[len('/api'):]
+        qs = environ.get('QUERY_STRING', '')
+        if '__path__' in qs:
+            params = parse_qs(qs, keep_blank_values=True)
+            if '__path__' in params:
+                raw_path = params.pop('__path__')[0]
+                target_path = '/' + raw_path.lstrip('/')
+                environ['PATH_INFO'] = target_path
+                environ['QUERY_STRING'] = urlencode(params, doseq=True)
+        else:
+            path = environ.get('PATH_INFO', '')
+            matched_path = environ.get('HTTP_X_MATCHED_PATH')
+            if matched_path and not matched_path.startswith('/api/index.py'):
+                environ['PATH_INFO'] = matched_path
+            elif path == '/api/index.py' or path == '/api/index.py/':
+                environ['PATH_INFO'] = '/'
+            elif path.startswith('/api/index.py/'):
+                environ['PATH_INFO'] = path[len('/api/index.py'):]
+            elif path.startswith('/api/'):
+                environ['PATH_INFO'] = path[len('/api'):]
         return self.wsgi_app(environ, start_response)
 
 app.wsgi_app = VercelPathFix(app.wsgi_app)
-
-
-@app.route("/api/index.py")
-def vercel_root():
-    """Fallback handler for Vercel default rewrite target."""
-    return index()
-
 
 
 @app.context_processor
@@ -62,7 +67,7 @@ def inject_global_data():
 
 @app.route("/")
 def index():
-    """Home page with search form and highlights."""
+    """Home page with search console and live fleet highlights."""
     cities = db.get_distinct_cities()
     popular_trips = db.search_trips()[:4]
     metrics = db.get_admin_analytics()["metrics"]
@@ -71,7 +76,7 @@ def index():
 
 @app.route("/trips")
 def trips():
-    """Search & filter scheduled bus trips."""
+    """Search & filter scheduled intercity bus trips."""
     source = request.args.get("source", "").strip()
     destination = request.args.get("destination", "").strip()
     travel_date = request.args.get("travel_date", "").strip()
@@ -110,12 +115,12 @@ def book_seat(trip_id):
 
     if request.method == "POST":
         try:
-            # Current logged in passenger (defaults to Rohit Sharma for student demo)
+            # Active passenger ID
             user_id = int(request.form.get("user_id", 2))
             seat_numbers_str = request.form.get("selected_seats", "")
             
             if not seat_numbers_str:
-                flash("Please select at least one seat from the layout.", "error")
+                flash("Please select at least one seat from the bus layout.", "error")
                 return redirect(url_for("book_seat", trip_id=trip_id))
 
             seat_numbers = [int(s) for s in seat_numbers_str.split(",") if s.strip()]
@@ -139,7 +144,7 @@ def book_seat(trip_id):
 
             # Execute transactional reservation
             booking_res = db.create_reservation(user_id=user_id, trip_id=trip_id, passengers=passengers)
-            flash(f"Booking confirmed successfully! Your PNR is {booking_res['pnr']}", "success")
+            flash(f"Reservation confirmed successfully! PNR: {booking_res['pnr']}", "success")
             return redirect(url_for("confirmation", pnr=booking_res["pnr"]))
 
         except Exception as e:
@@ -156,23 +161,22 @@ def book_seat(trip_id):
 
 @app.route("/confirmation/<pnr>")
 def confirmation(pnr):
-    """View digital ticket confirmation by PNR."""
+    """View digital boarding pass and ticket by PNR."""
     booking = db.get_booking_by_pnr(pnr)
     if not booking:
-        flash("PNR record not found.", "error")
+        flash("Booking reference not found.", "error")
         return redirect(url_for("index"))
     return render_template("confirmation.html", booking=booking)
 
 
 @app.route("/my-bookings")
 def my_bookings():
-    """Passenger booking history and cancellation portal."""
+    """Passenger booking portal and cancellation manager."""
     search_pnr = request.args.get("pnr", "").strip()
     if search_pnr:
         single_booking = db.get_booking_by_pnr(search_pnr)
         bookings = [single_booking] if single_booking else []
     else:
-        # Default user 2 (Rohit Sharma)
         bookings = db.query_db("""
             SELECT * FROM vw_booking_summary 
             WHERE customer_email = 'rohit.sharma@example.com' 
@@ -184,7 +188,7 @@ def my_bookings():
 
 @app.route("/cancel-booking", methods=["POST"])
 def cancel_ticket():
-    """Cancel booking and process refund."""
+    """Cancel booking and release allocated seats."""
     pnr = request.form.get("pnr", "").strip()
     try:
         db.cancel_booking(pnr)
@@ -195,12 +199,12 @@ def cancel_ticket():
 
 
 # ============================================================================
-# ADMIN & FLEET MANAGEMENT
+# FLEET OPERATIONS & ANALYTICS
 # ============================================================================
 
 @app.route("/admin")
 def admin_dashboard():
-    """Admin dashboard for managing buses, routes, and trips."""
+    """Fleet operations dashboard for managing coaches, corridors, and schedules."""
     buses = db.query_db("SELECT * FROM buses ORDER BY bus_id ASC;") or []
     routes = db.query_db("SELECT * FROM routes ORDER BY route_id ASC;") or []
     trips = db.query_db("SELECT * FROM vw_trip_schedule ORDER BY trip_date DESC, departure_time ASC;") or []
@@ -216,7 +220,7 @@ def admin_dashboard():
 
 @app.route("/admin/bus/add", methods=["POST"])
 def admin_add_bus():
-    """Add a new bus to the fleet (Demonstrating INSERT operation)."""
+    """Register a new coach to the fleet."""
     try:
         bus_number = request.form.get("bus_number", "").strip().upper()
         operator_name = request.form.get("operator_name", "").strip()
@@ -229,15 +233,15 @@ def admin_add_bus():
             INSERT INTO buses (bus_number, operator_name, bus_type, total_seats, amenities, rating)
             VALUES (?, ?, ?, ?, ?, ?);
         """, (bus_number, operator_name, bus_type, total_seats, amenities, rating), commit=True)
-        flash(f"Bus '{bus_number}' added successfully to the fleet!", "success")
+        flash(f"Coach '{bus_number}' successfully registered to fleet.", "success")
     except Exception as e:
-        flash(f"Error adding bus: {str(e)}", "error")
+        flash(f"Failed to register bus: {str(e)}", "error")
     return redirect(url_for("admin_dashboard"))
 
 
 @app.route("/admin/route/add", methods=["POST"])
 def admin_add_route():
-    """Add a new route (Demonstrating INSERT with UNIQUE constraint)."""
+    """Establish a new intercity route corridor."""
     try:
         source_city = request.form.get("source_city", "").strip()
         destination_city = request.form.get("destination_city", "").strip()
@@ -248,15 +252,15 @@ def admin_add_route():
             INSERT INTO routes (source_city, destination_city, distance_km, estimated_duration_hours)
             VALUES (?, ?, ?, ?);
         """, (source_city, destination_city, distance_km, duration), commit=True)
-        flash(f"Route '{source_city} -> {destination_city}' created successfully!", "success")
+        flash(f"Route corridor '{source_city} -> {destination_city}' established.", "success")
     except Exception as e:
-        flash(f"Error creating route: {str(e)}", "error")
+        flash(f"Failed to create route: {str(e)}", "error")
     return redirect(url_for("admin_dashboard"))
 
 
 @app.route("/admin/trip/add", methods=["POST"])
 def admin_add_trip():
-    """Schedule a new trip (Demonstrating INSERT with Foreign Keys)."""
+    """Publish a scheduled journey."""
     try:
         bus_id = int(request.form.get("bus_id"))
         route_id = int(request.form.get("route_id"))
@@ -269,54 +273,54 @@ def admin_add_trip():
             INSERT INTO trips (bus_id, route_id, trip_date, departure_time, arrival_time, fare, status)
             VALUES (?, ?, ?, ?, ?, ?, 'SCHEDULED');
         """, (bus_id, route_id, trip_date, departure_time, arrival_time, fare), commit=True)
-        flash("Trip successfully scheduled!", "success")
+        flash("Trip departure scheduled successfully.", "success")
     except Exception as e:
-        flash(f"Error scheduling trip: {str(e)}", "error")
+        flash(f"Failed to schedule departure: {str(e)}", "error")
     return redirect(url_for("admin_dashboard"))
 
 
 @app.route("/admin/reports")
 def admin_reports():
-    """Comprehensive analytical reports with SQL aggregates and Chart.js."""
+    """Operational & revenue intelligence dashboard."""
     analytics = db.get_admin_analytics()
     return render_template("reports.html", analytics=analytics)
 
 
 @app.route("/admin/reset-db", methods=["POST"])
 def admin_reset_db():
-    """Reset database to fresh seed data."""
+    """Restore sample database records."""
     try:
         db.init_db(force=True)
-        flash("Database has been reset to default realistic seed data!", "success")
+        flash("Fleet and schedule records refreshed successfully.", "success")
     except Exception as e:
-        flash(f"Failed to reset database: {str(e)}", "error")
+        flash(f"Failed to refresh records: {str(e)}", "error")
     return redirect(url_for("admin_dashboard"))
 
 
 # ============================================================================
-# DBS SYLLABUS DEMO: SQL LAB & RELATIONAL SCHEMA
+# ENTERPRISE CONSOLE: DATABASE QUERY STUDIO & ARCHITECTURE
 # ============================================================================
 
 @app.route("/sql-lab")
 def sql_lab():
-    """Interactive SQL Query Console & Syllabus Query Demonstrator."""
+    """Interactive Database Query Studio."""
     tables = [
-        {"name": "users", "desc": "Passenger accounts & system administrators"},
-        {"name": "buses", "desc": "Fleet details, type, seat capacity & rating"},
-        {"name": "routes", "desc": "Source & destination corridors with distances"},
-        {"name": "trips", "desc": "Scheduled departures, timing, bus assignment & fare"},
-        {"name": "bookings", "desc": "Reservation header with PNR, amounts & status"},
-        {"name": "booking_passengers", "desc": "Seat numbers and passenger names manifest"},
-        {"name": "vw_trip_schedule", "desc": "Relational view joining trips, buses & routes"},
-        {"name": "vw_booking_summary", "desc": "Relational view joining bookings, users & routes"},
-        {"name": "vw_route_revenue", "desc": "Aggregated revenue & passenger metrics view"}
+        {"name": "users", "desc": "Customer accounts and operations staff"},
+        {"name": "buses", "desc": "Coach fleet registry, category, seat capacity and rating"},
+        {"name": "routes", "desc": "Intercity corridors with verified distances and durations"},
+        {"name": "trips", "desc": "Scheduled departures, vehicle allocation, and tariff"},
+        {"name": "bookings", "desc": "Reservation transactions, PNR references, and status"},
+        {"name": "booking_passengers", "desc": "Seat numbers and passenger manifest records"},
+        {"name": "vw_trip_schedule", "desc": "Integrated view consolidating schedules, fleet, and routes"},
+        {"name": "vw_booking_summary", "desc": "Integrated view joining bookings, customers, and journeys"},
+        {"name": "vw_route_revenue", "desc": "Aggregated corridor financial and passenger performance"}
     ]
     return render_template("sql_lab.html", tables=tables)
 
 
 @app.route("/api/execute-sql", methods=["POST"])
 def api_execute_sql():
-    """API endpoint to run raw SQL query for demonstration."""
+    """API endpoint to execute queries in the Database Studio."""
     data = request.get_json() or {}
     query_str = data.get("query", "").strip()
     if not query_str:
@@ -328,7 +332,7 @@ def api_execute_sql():
 
 @app.route("/schema")
 def schema_viewer():
-    """Interactive ER diagram, relational schema, and 3NF normalization notes."""
+    """System entity architecture, data models, and normalization details."""
     schema_path = os.path.join(os.path.dirname(__file__), "database", "schema.sql")
     queries_path = os.path.join(os.path.dirname(__file__), "database", "queries.sql")
     seed_path = os.path.join(os.path.dirname(__file__), "database", "seed.sql")
