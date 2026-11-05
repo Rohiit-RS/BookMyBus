@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BookMyBus - Online Bus Reservation System{% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js for Reports -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Mermaid.js for ER Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3">
+                    <a href="{{ url_for('index') }}" class="flex items-center space-x-2.5">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-rose-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                            <i class="fa-solid fa-bus text-lg"></i>
+                        </div>
+                        <div>
+                            <span class="text-xl font-bold tracking-tight text-slate-900">Book<span class="text-brand-600">My</span>Bus</span>
+                            <span class="block text-[10px] uppercase font-semibold text-slate-400 tracking-wider -mt-1">DBS Project</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="{{ url_for('index') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'index' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
+                        <i class="fa-solid fa-house mr-1.5 opacity-70"></i> Home
+                    </a>
+                    <a href="{{ url_for('trips') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'trips' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
+                        <i class="fa-solid fa-route mr-1.5 opacity-70"></i> Find Buses
+                    </a>
+                    <a href="{{ url_for('my_bookings') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'my_bookings' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
+                        <i class="fa-solid fa-ticket mr-1.5 opacity-70"></i> My Bookings
+                    </a>
+                    <a href="{{ url_for('admin_reports') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'admin_reports' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
+                        <i class="fa-solid fa-chart-pie mr-1.5 opacity-70"></i> Reports & Analytics
+                    </a>
+                    <a href="{{ url_for('sql_lab') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'sql_lab' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
+                        <span class="relative">
+                            <i class="fa-solid fa-terminal mr-1.5 opacity-70"></i> SQL Lab
+                            <span class="absolute -top-1 -right-2 px-1 py-0.2 bg-emerald-500 text-white text-[9px] rounded-full font-bold">DBS</span>
+                        </span>
+                    </a>
+                    <a href="{{ url_for('schema_viewer') }}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 transition {% if request.endpoint == 'schema_viewer' %}text-brand-600 bg-brand-50{% else %}text-slate-600{% endif %}">
+                        <i class="fa-solid fa-diagram-project mr-1.5 opacity-70"></i> Schema & ERD
+                    </a>
+                </div>
+
+                <!-- Admin Action -->
+                <div class="flex items-center space-x-3">
+                    <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition shadow-sm">
+                        <i class="fa-solid fa-shield-halved mr-1.5 text-rose-400"></i> Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded-xl flex items-center justify-between text-sm shadow-sm transition animate-fade-in {% if category == 'error' %}bg-rose-50 border border-rose-200 text-rose-800{% else %}bg-emerald-50 border border-emerald-200 text-emerald-800{% endif %}">
+                        <div class="flex items-center space-x-2.5">
+                            <i class="fa-solid {% if category == 'error' %}fa-circle-exclamation text-rose-600{% else %}fa-circle-check text-emerald-600{% endif %} text-lg"></i>
+                            <span class="font-medium">{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-700">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content Block -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
+                        <i class="fa-solid fa-bus"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">BookMyBus - Database-Driven Application</p>
+                        <p class="text-xs text-slate-500">Database Systems (DBS) Course Project • Relational 3NF & SQL Queries</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6 text-xs text-slate-500">
+                    <span class="flex items-center space-x-1.5">
+                        <span class="w-2 h-2 rounded-full {% if is_postgres %}bg-emerald-500{% else %}bg-sky-500{% endif %}"></span>
+                        <span>Engine: <strong>{% if is_postgres %}PostgreSQL{% else %}PostgreSQL / SQLite Dual Engine{% endif %}</strong></span>
+                    </span>
+                    <a href="{{ url_for('sql_lab') }}" class="hover:text-brand-600 underline">SQL Query Demonstrator</a>
+                    <a href="{{ url_for('schema_viewer') }}" class="hover:text-brand-600 underline">ER Diagram & 3NF Schema</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

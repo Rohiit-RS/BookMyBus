@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}Interactive SQL Query Lab - DBS Project Demo{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-semibold mb-2">
+                <i class="fa-solid fa-terminal text-rose-400"></i>
+                <span>Database Systems (DBS) Syllabus Requirement (Section 11)</span>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900">Interactive SQL Lab & Demonstrator</h1>
+            <p class="text-sm text-slate-500 mt-0.5">Run, inspect, and evaluate queries covered in the course curriculum against the live relational database.</p>
+        </div>
+
+        <div class="flex items-center space-x-3 text-xs">
+            <span class="px-3 py-1.5 rounded-xl bg-slate-100 font-mono font-semibold text-slate-700 border border-slate-200">
+                Engine: <strong class="text-brand-600">{% if is_postgres %}PostgreSQL{% else %}PostgreSQL / SQLite Dual Mode{% endif %}</strong>
+            </span>
+            <a href="{{ url_for('schema_viewer') }}" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50">
+                <i class="fa-solid fa-diagram-project mr-1"></i> Schema & ERD
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Query Selector Chips (Syllabus Concepts) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+            <i class="fa-solid fa-bolt text-amber-500 mr-1"></i> 1-Click Course Concept Demonstrations:
+        </h3>
+        
+        <div class="flex flex-wrap gap-2 text-xs">
+            <button onclick="loadConceptQuery('where')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 border border-slate-200 transition">
+                1. SELECT + WHERE
+            </button>
+            <button onclick="loadConceptQuery('order_by')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 border border-slate-200 transition">
+                2. ORDER BY
+            </button>
+            <button onclick="loadConceptQuery('aggregates')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 border border-slate-200 transition">
+                3. Aggregates (COUNT, SUM, AVG)
+            </button>
+            <button onclick="loadConceptQuery('group_by')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 border border-slate-200 transition">
+                4. GROUP BY & HAVING
+            </button>
+            <button onclick="loadConceptQuery('joins')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 border border-slate-200 transition">
+                5. 5-Table INNER JOIN
+            </button>
+            <button onclick="loadConceptQuery('subquery')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 border border-slate-200 transition">
+                6. Nested Subquery
+            </button>
+            <button onclick="loadConceptQuery('views')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 border border-slate-200 transition">
+                7. Query SQL View
+            </button>
+            <button onclick="loadConceptQuery('insert')" class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold border border-emerald-200 transition">
+                8. INSERT Query
+            </button>
+            <button onclick="loadConceptQuery('update')" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold border border-amber-200 transition">
+                9. UPDATE Query
+            </button>
+            <button onclick="loadConceptQuery('delete')" class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 font-semibold border border-rose-200 transition">
+                10. DELETE Query
+            </button>
+        </div>
+    </div>
+
+    <!-- SQL Editor & Output Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Editor Column (8 cols) -->
+        <div class="lg:col-span-8 space-y-6">
+            <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-800">
+                <!-- Editor Top Bar -->
+                <div class="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex justify-between items-center text-xs">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                        <span class="text-slate-400 font-mono ml-2 font-semibold" id="queryTitle">SQL Query Editor</span>
+                    </div>
+                    <button onclick="runQuery()" id="runBtn" class="px-4 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-bold transition flex items-center space-x-1.5 shadow-sm">
+                        <i class="fa-solid fa-play text-[10px]"></i>
+                        <span>Execute SQL</span>
+                    </button>
+                </div>
+
+                <!-- Textarea -->
+                <div class="p-4">
+                    <textarea id="sqlQueryInput" rows="7" class="w-full bg-transparent text-emerald-400 font-mono text-xs focus:outline-none resize-y leading-relaxed" placeholder="Type your SQL query here (e.g. SELECT * FROM buses;)">SELECT 
+    t.trip_id,
+    r.source_city,
+    r.destination_city,
+    t.trip_date,
+    t.departure_time,
+    t.fare,
+    b.operator_name,
+    b.bus_type
+FROM trips t
+INNER JOIN routes r ON t.route_id = r.route_id
+INNER JOIN buses b ON t.bus_id = b.bus_id
+WHERE r.source_city = 'Bangalore'
+ORDER BY t.fare ASC;</textarea>
+                </div>
+
+                <!-- Execution Stats Footer -->
+                <div class="bg-slate-950 px-4 py-2 text-[11px] font-mono text-slate-400 border-t border-slate-800 flex justify-between items-center">
+                    <span id="execStats">Press 'Execute SQL' or select a concept above.</span>
+                    <button onclick="clearQuery()" class="text-slate-400 hover:text-white">Clear</button>
+                </div>
+            </div>
+
+            <!-- Query Results Table Section -->
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-table text-slate-500 text-xs"></i>
+                        <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider">Query Output Results</h4>
+                    </div>
+                    <span id="rowsCountBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700">0 rows</span>
+                </div>
+
+                <div id="resultsTableContainer" class="overflow-x-auto p-4 max-h-96">
+                    <p class="text-xs text-slate-400 italic text-center py-8">Click 'Execute SQL' above to view the tabular output.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schema Helper Column (4 cols) -->
+        <div class="lg:col-span-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="font-bold text-slate-900 text-sm pb-3 border-b border-slate-100 mb-4 flex items-center justify-between">
+                    <span>Database Tables & Views</span>
+                    <span class="text-xs text-brand-600 font-mono">{{ tables|length }} entities</span>
+                </h3>
+
+                <div class="space-y-3">
+                    {% for tbl in tables %}
+                    <div class="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition cursor-pointer border border-slate-200/60" onclick="quickSelectTable('{{ tbl.name }}')">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono font-bold text-xs text-slate-800">{{ tbl.name }}</span>
+                            <span class="text-[10px] text-slate-400">click to query</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-1">{{ tbl.desc }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const conceptQueries = {
+        where: {
+            title: "1. SELECT with WHERE Filtering",
+            sql: `SELECT \n    t.trip_id,\n    r.source_city,\n    r.destination_city,\n    t.trip_date,\n    t.departure_time,\n    t.fare,\n    b.operator_name,\n    b.bus_type\nFROM trips t\nINNER JOIN routes r ON t.route_id = r.route_id\nINNER JOIN buses b ON t.bus_id = b.bus_id\nWHERE r.source_city = 'Bangalore' AND t.fare <= 1300.00;`
+        },
+        order_by: {
+            title: "2. Sorting with ORDER BY",
+            sql: `SELECT \n    bus_id,\n    bus_number,\n    operator_name,\n    bus_type,\n    total_seats,\n    rating\nFROM buses\nORDER BY rating DESC, total_seats ASC;`
+        },
+        aggregates: {
+            title: "3. Aggregates (COUNT, SUM, AVG, MIN, MAX)",
+            sql: `SELECT \n    COUNT(booking_id) AS total_bookings,\n    SUM(total_amount) AS gross_sales,\n    ROUND(AVG(total_amount), 2) AS average_booking_value,\n    MIN(total_amount) AS min_ticket_fare,\n    MAX(total_amount) AS max_ticket_fare\nFROM bookings\nWHERE booking_status = 'CONFIRMED';`
+        },
+        group_by: {
+            title: "4. GROUP BY & HAVING Filter",
+            sql: `SELECT \n    r.source_city || ' -> ' || r.destination_city AS route_name,\n    COUNT(bk.booking_id) AS total_bookings,\n    SUM(bk.total_seats) AS total_passengers,\n    SUM(bk.total_amount) AS total_route_revenue\nFROM routes r\nINNER JOIN trips t ON r.route_id = t.route_id\nINNER JOIN bookings bk ON t.trip_id = bk.trip_id\nWHERE bk.booking_status = 'CONFIRMED'\nGROUP BY r.source_city, r.destination_city\nHAVING SUM(bk.total_amount) >= 1000.00\nORDER BY total_route_revenue DESC;`
+        },
+        joins: {
+            title: "5. 5-Table Relational INNER JOIN",
+            sql: `SELECT \n    bk.pnr_number,\n    u.full_name AS booked_by,\n    bp.seat_number,\n    bp.passenger_name,\n    bp.passenger_age,\n    bp.passenger_gender,\n    r.source_city,\n    r.destination_city,\n    t.trip_date,\n    b.operator_name\nFROM bookings bk\nINNER JOIN users u ON bk.user_id = u.user_id\nINNER JOIN booking_passengers bp ON bk.booking_id = bp.booking_id\nINNER JOIN trips t ON bk.trip_id = t.trip_id\nINNER JOIN routes r ON t.route_id = r.route_id\nINNER JOIN buses b ON t.bus_id = b.bus_id\nWHERE bk.booking_status = 'CONFIRMED'\nORDER BY bk.pnr_number, bp.seat_number;`
+        },
+        subquery: {
+            title: "6. Nested Subquery",
+            sql: `SELECT \n    b.bus_number,\n    b.operator_name,\n    b.bus_type,\n    b.rating\nFROM buses b\nWHERE b.bus_id IN (\n    SELECT t.bus_id\n    FROM trips t\n    GROUP BY t.bus_id\n    HAVING AVG(t.fare) > (SELECT AVG(fare) FROM trips)\n);`
+        },
+        views: {
+            title: "7. Relational View Query",
+            sql: `SELECT * FROM vw_route_revenue\nORDER BY total_revenue DESC;`
+        },
+        insert: {
+            title: "8. Data Insertion (INSERT)",
+            sql: `INSERT INTO routes (source_city, destination_city, distance_km, estimated_duration_hours)\nVALUES ('Mysore', 'Ooty', 125.0, 3.5);`
+        },
+        update: {
+            title: "9. Data Update (UPDATE)",
+            sql: `UPDATE buses \nSET rating = 4.9 \nWHERE bus_number = 'KA-01-AB-1234';`
+        },
+        delete: {
+            title: "10. Data Deletion (DELETE)",
+            sql: `DELETE FROM routes \nWHERE source_city = 'Mysore' AND destination_city = 'Ooty';`
+        }
+    };
+
+    function loadConceptQuery(key) {
+        const item = conceptQueries[key];
+        if (item) {
+            document.getElementById('queryTitle').innerText = item.title;
+            document.getElementById('sqlQueryInput').value = item.sql;
+            runQuery();
+        }
+    }
+
+    function quickSelectTable(tableName) {
+        document.getElementById('queryTitle').innerText = `SELECT * FROM ${tableName}`;
+        document.getElementById('sqlQueryInput').value = `SELECT * FROM ${tableName} LIMIT 20;`;
+        runQuery();
+    }
+
+    function clearQuery() {
+        document.getElementById('sqlQueryInput').value = '';
+        document.getElementById('sqlQueryInput').focus();
+    }
+
+    async function runQuery() {
+        const query = document.getElementById('sqlQueryInput').value.trim();
+        if (!query) return;
+
+        const btn = document.getElementById('runBtn');
+        const stats = document.getElementById('execStats');
+        const container = document.getElementById('resultsTableContainer');
+        const countBadge = document.getElementById('rowsCountBadge');
+
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Running...</span>`;
+        stats.innerText = "Executing on live database...";
+
+        try {
+            const resp = await fetch('{{ url_for("api_execute_sql") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query })
+            });
+            const data = await resp.json();
+
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-play text-[10px]"></i> <span>Execute SQL</span>`;
+
+            if (data.success) {
+                stats.innerText = `Executed in ${data.duration_ms} ms via ${data.db_engine} (${data.row_count} rows affected/returned).`;
+                countBadge.innerText = `${data.row_count} rows`;
+
+                if (!data.columns || data.columns.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-emerald-600 p-4 font-semibold"><i class="fa-solid fa-check mr-1"></i> Statement executed successfully.</p>`;
+                    return;
+                }
+
+                let html = `<table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+                    <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                        <tr>`;
+                data.columns.forEach(col => {
+                    html += `<th class="py-2.5 px-3 whitespace-nowrap">${col}</th>`;
+                });
+                html += `</tr></thead><tbody class="divide-y divide-slate-100 font-mono text-slate-700">`;
+
+                data.rows.forEach((row, idx) => {
+                    html += `<tr class="${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} hover:bg-rose-50/30">`;
+                    data.columns.forEach(col => {
+                        html += `<td class="py-2 px-3 whitespace-nowrap">${row[col] !== null ? row[col] : '<span class="text-slate-300 italic">NULL</span>'}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+
+            } else {
+                stats.innerText = `Error in query execution (${data.db_engine}).`;
+                countBadge.innerText = `Error`;
+                container.innerHTML = `<div class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-mono">
+                    <p class="font-bold mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Database Error:</p>
+                    <p>${data.error}</p>
+                </div>`;
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-play text-[10px]"></i> <span>Execute SQL</span>`;
+            stats.innerText = "Network / Server Error.";
+            container.innerHTML = `<p class="text-xs text-rose-600 p-4">${err.message}</p>`;
+        }
+    }
+
+    // Auto run the default query on load
+    window.addEventListener('DOMContentLoaded', () => {
+        runQuery();
+    });
+</script>
+{% endblock %}

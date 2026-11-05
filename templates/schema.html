@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+
+{% block title %}Relational Schema & ER Diagram - DBS Project{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-semibold mb-2">
+                <i class="fa-solid fa-diagram-project text-rose-400"></i>
+                <span>Database Design & Theoretical Foundation (PDF Tasks #5, #6, #7, #12)</span>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900">Entity-Relationship Diagram & Relational Schema</h1>
+            <p class="text-sm text-slate-500 mt-0.5">Comprehensive architectural documentation for the Bus Reservation System in 3NF.</p>
+        </div>
+
+        <a href="{{ url_for('sql_lab') }}" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition inline-flex items-center space-x-1.5 shadow-sm">
+            <i class="fa-solid fa-terminal"></i>
+            <span>Test Queries in SQL Lab</span>
+        </a>
+    </div>
+
+    <!-- 1. Interactive ER Diagram Section -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm mb-12">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+            <div>
+                <h2 class="text-lg font-bold text-slate-900">1. Entity-Relationship (ER) Diagram</h2>
+                <p class="text-xs text-slate-400">Cardinality notations: One-to-Many (1:N) relationships and associative entities</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">Chen / Crow's Foot</span>
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 overflow-x-auto flex justify-center">
+            <pre class="mermaid text-center">
+erDiagram
+    USERS ||--o{ BOOKINGS : "places (1:N)"
+    BUSES ||--o{ TRIPS : "assigned_to (1:N)"
+    ROUTES ||--o{ TRIPS : "scheduled_on (1:N)"
+    TRIPS ||--o{ BOOKINGS : "reserved_for (1:N)"
+    BOOKINGS ||--|{ BOOKING_PASSENGERS : "contains (1:N)"
+
+    USERS {
+        int user_id PK
+        string full_name
+        string email UK
+        string phone
+        string role
+        timestamp created_at
+    }
+
+    BUSES {
+        int bus_id PK
+        string bus_number UK
+        string operator_name
+        string bus_type
+        int total_seats
+        float rating
+    }
+
+    ROUTES {
+        int route_id PK
+        string source_city
+        string destination_city
+        float distance_km
+        float estimated_duration_hours
+    }
+
+    TRIPS {
+        int trip_id PK
+        int bus_id FK
+        int route_id FK
+        date trip_date
+        time departure_time
+        time arrival_time
+        float fare
+        string status
+    }
+
+    BOOKINGS {
+        int booking_id PK
+        string pnr_number UK
+        int user_id FK
+        int trip_id FK
+        timestamp booking_timestamp
+        int total_seats
+        float total_amount
+        string payment_status
+        string booking_status
+    }
+
+    BOOKING_PASSENGERS {
+        int ticket_id PK
+        int booking_id FK
+        int seat_number
+        string passenger_name
+        int passenger_age
+        string passenger_gender
+    }
+            </pre>
+        </div>
+    </div>
+
+    <!-- 2. Relational Schema Specification -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm mb-12">
+        <div class="pb-4 border-b border-slate-100 mb-6">
+            <h2 class="text-lg font-bold text-slate-900">2. Relational Schema & Integrity Constraints</h2>
+            <p class="text-xs text-slate-400">Formal table definitions with Primary Keys, Foreign Keys, NOT NULL, UNIQUE, and CHECK constraints.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+            <!-- Users -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-mono font-bold text-slate-900 text-sm">users</span>
+                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">Master Entity</span>
+                </div>
+                <ul class="space-y-1 font-mono text-slate-600">
+                    <li><strong class="text-rose-600">user_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong>full_name</strong> (VARCHAR(100), NOT NULL)</li>
+                    <li><strong>email</strong> (VARCHAR(120), UNIQUE, NOT NULL)</li>
+                    <li><strong>phone</strong> (VARCHAR(20), NOT NULL)</li>
+                    <li><strong>role</strong> (VARCHAR(20), CHECK role IN ('PASSENGER', 'ADMIN'))</li>
+                    <li><strong>created_at</strong> (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)</li>
+                </ul>
+            </div>
+
+            <!-- Buses -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-mono font-bold text-slate-900 text-sm">buses</span>
+                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">Fleet Entity</span>
+                </div>
+                <ul class="space-y-1 font-mono text-slate-600">
+                    <li><strong class="text-rose-600">bus_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong>bus_number</strong> (VARCHAR(30), UNIQUE, NOT NULL)</li>
+                    <li><strong>operator_name</strong> (VARCHAR(100), NOT NULL)</li>
+                    <li><strong>bus_type</strong> (CHECK IN ('AC Sleeper', 'Volvo Multi-Axle', ...))</li>
+                    <li><strong>total_seats</strong> (INTEGER, CHECK > 0 AND <= 60)</li>
+                    <li><strong>rating</strong> (NUMERIC, CHECK >= 1.0 AND <= 5.0)</li>
+                </ul>
+            </div>
+
+            <!-- Routes -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-mono font-bold text-slate-900 text-sm">routes</span>
+                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">Network Entity</span>
+                </div>
+                <ul class="space-y-1 font-mono text-slate-600">
+                    <li><strong class="text-rose-600">route_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong>source_city</strong> (VARCHAR(80), NOT NULL)</li>
+                    <li><strong>destination_city</strong> (VARCHAR(80), NOT NULL)</li>
+                    <li><strong>distance_km</strong> (NUMERIC, CHECK > 0)</li>
+                    <li><strong>estimated_duration_hours</strong> (NUMERIC, CHECK > 0)</li>
+                    <li><span class="text-amber-700">UNIQUE (source_city, destination_city)</span></li>
+                    <li><span class="text-amber-700">CHECK (source_city <> destination_city)</span></li>
+                </ul>
+            </div>
+
+            <!-- Trips -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-mono font-bold text-slate-900 text-sm">trips</span>
+                    <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold text-[10px]">Associative Entity</span>
+                </div>
+                <ul class="space-y-1 font-mono text-slate-600">
+                    <li><strong class="text-rose-600">trip_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong class="text-indigo-600">bus_id</strong> (FK &rarr; buses.bus_id, CASCADE)</li>
+                    <li><strong class="text-indigo-600">route_id</strong> (FK &rarr; routes.route_id, CASCADE)</li>
+                    <li><strong>trip_date</strong> (DATE, NOT NULL)</li>
+                    <li><strong>departure_time</strong> (TIME, NOT NULL)</li>
+                    <li><strong>arrival_time</strong> (TIME, NOT NULL)</li>
+                    <li><strong>fare</strong> (NUMERIC, CHECK fare > 0)</li>
+                    <li><strong>status</strong> (CHECK IN ('SCHEDULED', 'COMPLETED', 'CANCELLED'))</li>
+                </ul>
+            </div>
+
+            <!-- Bookings -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-mono font-bold text-slate-900 text-sm">bookings</span>
+                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Transaction Entity</span>
+                </div>
+                <ul class="space-y-1 font-mono text-slate-600">
+                    <li><strong class="text-rose-600">booking_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong>pnr_number</strong> (VARCHAR(20), UNIQUE, NOT NULL)</li>
+                    <li><strong class="text-indigo-600">user_id</strong> (FK &rarr; users.user_id, RESTRICT)</li>
+                    <li><strong class="text-indigo-600">trip_id</strong> (FK &rarr; trips.trip_id, RESTRICT)</li>
+                    <li><strong>booking_timestamp</strong> (TIMESTAMP, CURRENT_TIMESTAMP)</li>
+                    <li><strong>total_seats</strong> (INTEGER, CHECK total_seats > 0)</li>
+                    <li><strong>total_amount</strong> (NUMERIC, CHECK total_amount >= 0)</li>
+                    <li><strong>booking_status</strong> (CHECK IN ('CONFIRMED', 'CANCELLED'))</li>
+                </ul>
+            </div>
+
+            <!-- Booking Passengers -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-mono font-bold text-slate-900 text-sm">booking_passengers</span>
+                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Seat Allocation Detail</span>
+                </div>
+                <ul class="space-y-1 font-mono text-slate-600">
+                    <li><strong class="text-rose-600">ticket_id</strong> (INTEGER, PRIMARY KEY)</li>
+                    <li><strong class="text-indigo-600">booking_id</strong> (FK &rarr; bookings.booking_id, CASCADE)</li>
+                    <li><strong>seat_number</strong> (INTEGER, CHECK > 0 AND <= 60)</li>
+                    <li><strong>passenger_name</strong> (VARCHAR(100), NOT NULL)</li>
+                    <li><strong>passenger_age</strong> (INTEGER, CHECK >= 1 AND <= 120)</li>
+                    <li><strong>passenger_gender</strong> (CHECK IN ('Male', 'Female', 'Other'))</li>
+                    <li><span class="text-amber-700">UNIQUE (booking_id, seat_number)</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Normalization Walkthrough (1NF, 2NF, 3NF) -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm mb-12">
+        <div class="pb-4 border-b border-slate-100 mb-6">
+            <h2 class="text-lg font-bold text-slate-900">3. Normalization Analysis (1NF &rarr; 2NF &rarr; 3NF)</h2>
+            <p class="text-xs text-slate-400">Elimination of redundant storage, insertion anomalies, update anomalies, and deletion anomalies.</p>
+        </div>
+
+        <div class="space-y-6 text-xs text-slate-600 leading-relaxed">
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                <h4 class="font-bold text-slate-900 text-sm mb-2 text-rose-700">First Normal Form (1NF) - Atomicity</h4>
+                <p>
+                    <strong>Requirement:</strong> Each attribute must hold atomic (indivisible) values, and no repeating groups exist.
+                </p>
+                <p class="mt-2 text-slate-500">
+                    <strong>Implementation:</strong> In a legacy flat system, multiple passenger names and seats might be comma-separated strings inside a single booking record. In our schema, passenger allocations are completely extracted into individual atomic rows in the <code class="font-mono font-bold text-slate-800">booking_passengers</code> table. Each row stores exactly one passenger name, age, gender, and seat number.
+                </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                <h4 class="font-bold text-slate-900 text-sm mb-2 text-sky-700">Second Normal Form (2NF) - No Partial Dependency</h4>
+                <p>
+                    <strong>Requirement:</strong> Must be in 1NF, and all non-key attributes must be fully functionally dependent on the entire primary key (no partial dependencies on a subset of a composite key).
+                </p>
+                <p class="mt-2 text-slate-500">
+                    <strong>Implementation:</strong> Rather than using a composite primary key like <code class="font-mono">(bus_number, source_city, trip_date)</code> where route details (distance, duration) only depend on the source and destination, we decomposed the schema into independent entities with surrogate primary keys (<code class="font-mono">bus_id</code>, <code class="font-mono">route_id</code>, <code class="font-mono">trip_id</code>). Route distance depends solely on <code class="font-mono">route_id</code>, not on the trip or bus.
+                </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                <h4 class="font-bold text-slate-900 text-sm mb-2 text-emerald-700">Third Normal Form (3NF) - No Transitive Dependency</h4>
+                <p>
+                    <strong>Requirement:</strong> Must be in 2NF, and no non-key attribute is transitively dependent on the primary key ($X \rightarrow Y$ and $Y \rightarrow Z$ where $X$ is the primary key).
+                </p>
+                <p class="mt-2 text-slate-500">
+                    <strong>Implementation:</strong> In the <code class="font-mono font-bold text-slate-800">trips</code> table, we store only <code class="font-mono">route_id</code> and <code class="font-mono">bus_id</code>. We do not store <code class="font-mono">operator_name</code> or <code class="font-mono">distance_km</code> in trips, because that would create a transitive dependency (<code class="font-mono">trip_id &rarr; bus_id &rarr; operator_name</code>). Whenever trip details are required, we query via relational JOINs or pre-defined views (<code class="font-mono">vw_trip_schedule</code>).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Raw SQL Scripts Tabs -->
+    <div class="bg-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+            <div>
+                <h2 class="text-lg font-bold">4. Database SQL Source Scripts</h2>
+                <p class="text-xs text-slate-400">Pure PostgreSQL DDL & DML files ready for course submission</p>
+            </div>
+            <div class="flex space-x-2 text-xs">
+                <button onclick="showSqlTab('schema')" id="btnTabSchema" class="px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition">schema.sql</button>
+                <button onclick="showSqlTab('seed')" id="btnTabSeed" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition">seed.sql</button>
+                <button onclick="showSqlTab('queries')" id="btnTabQueries" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition">queries.sql</button>
+            </div>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs text-emerald-400 max-h-96 overflow-y-auto">
+            <pre id="codeSchema" class="whitespace-pre-wrap">{{ schema_sql }}</pre>
+            <pre id="codeSeed" class="whitespace-pre-wrap hidden">{{ seed_sql }}</pre>
+            <pre id="codeQueries" class="whitespace-pre-wrap hidden">{{ queries_sql }}</pre>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showSqlTab(tab) {
+        document.getElementById('codeSchema').classList.add('hidden');
+        document.getElementById('codeSeed').classList.add('hidden');
+        document.getElementById('codeQueries').classList.add('hidden');
+
+        document.getElementById('btnTabSchema').className = "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
+        document.getElementById('btnTabSeed').className = "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
+        document.getElementById('btnTabQueries').className = "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700 transition";
+
+        if (tab === 'schema') {
+            document.getElementById('codeSchema').classList.remove('hidden');
+            document.getElementById('btnTabSchema').className = "px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition";
+        } else if (tab === 'seed') {
+            document.getElementById('codeSeed').classList.remove('hidden');
+            document.getElementById('btnTabSeed').className = "px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition";
+        } else if (tab === 'queries') {
+            document.getElementById('codeQueries').classList.remove('hidden');
+            document.getElementById('btnTabQueries').className = "px-3 py-1.5 rounded-lg bg-brand-600 text-white font-bold transition";
+        }
+    }
+</script>
+{% endblock %}

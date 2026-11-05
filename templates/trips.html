@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Search Buses - BookMyBus{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Top Search Summary Bar -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-8 shadow-sm">
+        <form action="{{ url_for('trips') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Origin</label>
+                <select name="source" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-medium">
+                    <option value="">All Origins</option>
+                    {% for city in cities %}
+                        <option value="{{ city }}" {% if source == city %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Destination</label>
+                <select name="destination" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-medium">
+                    <option value="">All Destinations</option>
+                    {% for city in cities %}
+                        <option value="{{ city }}" {% if destination == city %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Travel Date</label>
+                <input type="date" name="travel_date" value="{{ travel_date }}" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-medium">
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-brand-600 text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-brand-700 transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-filter"></i>
+                    <span>Apply Filter</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar Filters -->
+        <div class="w-full lg:w-72 flex-shrink-0">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-6">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <h3 class="font-bold text-slate-900 text-sm">Bus Categories</h3>
+                    <a href="{{ url_for('trips') }}" class="text-xs text-brand-600 hover:underline">Clear</a>
+                </div>
+                
+                <div class="space-y-2 text-sm">
+                    <a href="{{ url_for('trips', source=source, destination=destination, travel_date=travel_date, bus_type='AC Sleeper') }}" class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 {% if bus_type == 'AC Sleeper' %}bg-rose-50 text-brand-700 font-bold{% else %}text-slate-600{% endif %}">
+                        <span><i class="fa-solid fa-bed mr-2 text-xs"></i> AC Sleeper</span>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                    </a>
+                    <a href="{{ url_for('trips', source=source, destination=destination, travel_date=travel_date, bus_type='Volvo') }}" class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 {% if bus_type == 'Volvo' %}bg-rose-50 text-brand-700 font-bold{% else %}text-slate-600{% endif %}">
+                        <span><i class="fa-solid fa-van-shuttle mr-2 text-xs"></i> Volvo Multi-Axle</span>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                    </a>
+                    <a href="{{ url_for('trips', source=source, destination=destination, travel_date=travel_date, bus_type='Seater') }}" class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 {% if bus_type == 'Seater' %}bg-rose-50 text-brand-700 font-bold{% else %}text-slate-600{% endif %}">
+                        <span><i class="fa-solid fa-chair mr-2 text-xs"></i> AC/Non-AC Seater</span>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                    </a>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                    <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">Amenities Included</h4>
+                    <ul class="text-xs text-slate-600 space-y-2">
+                        <li><i class="fa-solid fa-wifi text-emerald-500 mr-2"></i> Free High-Speed WiFi</li>
+                        <li><i class="fa-solid fa-plug text-emerald-500 mr-2"></i> Individual Charging Ports</li>
+                        <li><i class="fa-solid fa-bottle-water text-emerald-500 mr-2"></i> Complimentary Water</li>
+                        <li><i class="fa-solid fa-shield-virus text-emerald-500 mr-2"></i> Sanitized Deep Cleans</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trips List -->
+        <div class="flex-1">
+            <div class="flex items-center justify-between mb-4">
+                <p class="text-sm font-semibold text-slate-700">
+                    Found <span class="text-brand-600 font-bold">{{ trips|length }}</span> scheduled buses
+                </p>
+                <span class="text-xs text-slate-500">Sorted by departure time</span>
+            </div>
+
+            {% if trips %}
+                <div class="space-y-4">
+                    {% for trip in trips %}
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <!-- Operator & Bus details -->
+                            <div class="w-full md:w-1/3">
+                                <div class="flex items-center space-x-2">
+                                    <h3 class="font-bold text-slate-900 text-lg">{{ trip.operator_name }}</h3>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-700">
+                                        <i class="fa-solid fa-star text-[10px] mr-1"></i> {{ trip.rating }}
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-0.5">{{ trip.bus_type }} &bull; <span class="font-mono text-slate-600">{{ trip.bus_number }}</span></p>
+                                <p class="text-[11px] text-slate-400 mt-2 truncate">{{ trip.amenities }}</p>
+                            </div>
+
+                            <!-- Schedule & Route details -->
+                            <div class="flex-1 flex items-center justify-around text-center px-4">
+                                <div>
+                                    <p class="text-xl font-bold text-slate-900">{{ trip.departure_time }}</p>
+                                    <p class="text-xs font-semibold text-slate-600">{{ trip.source_city }}</p>
+                                    <p class="text-[10px] text-slate-400">{{ trip.trip_date }}</p>
+                                </div>
+                                <div class="px-4">
+                                    <p class="text-[11px] font-medium text-slate-400">{{ trip.estimated_duration_hours }}h &bull; {{ trip.distance_km }}km</p>
+                                    <div class="relative flex items-center justify-center my-1 w-24 mx-auto">
+                                        <div class="h-0.5 w-full bg-slate-200"></div>
+                                        <i class="fa-solid fa-arrow-right text-slate-400 absolute text-xs"></i>
+                                    </div>
+                                    <span class="text-[10px] text-emerald-600 font-semibold">Direct</span>
+                                </div>
+                                <div>
+                                    <p class="text-xl font-bold text-slate-900">{{ trip.arrival_time }}</p>
+                                    <p class="text-xs font-semibold text-slate-600">{{ trip.destination_city }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Fare & Action Button -->
+                            <div class="w-full md:w-auto text-right flex md:flex-col justify-between items-center md:items-end border-t md:border-t-0 pt-4 md:pt-0 border-slate-100">
+                                <div>
+                                    <span class="text-2xl font-black text-slate-900">&#8377;{{ trip.fare }}</span>
+                                    <span class="block text-[11px] text-slate-400">per seat</span>
+                                </div>
+                                <div class="mt-2 text-right">
+                                    <p class="text-xs font-semibold {% if trip.available_seats > 5 %}text-emerald-600{% else %}text-rose-600{% endif %} mb-2">
+                                        {{ trip.available_seats }} Seats Available
+                                    </p>
+                                    <a href="{{ url_for('book_seat', trip_id=trip.trip_id) }}" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 shadow-md shadow-brand-500/20 transition">
+                                        <span>Select Seats</span>
+                                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center">
+                    <div class="w-16 h-16 rounded-full bg-rose-50 text-brand-600 flex items-center justify-center text-2xl mx-auto mb-4">
+                        <i class="fa-solid fa-bus"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">No scheduled buses match your criteria</h3>
+                    <p class="text-sm text-slate-500 max-w-md mx-auto mt-1 mb-6">
+                        Try searching without origin/destination filters or clear the date to view all available schedules in the database.
+                    </p>
+                    <a href="{{ url_for('trips') }}" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition">
+                        <span>Reset All Filters</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
