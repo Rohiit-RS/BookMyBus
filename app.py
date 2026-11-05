@@ -20,6 +20,31 @@ with app.app_context():
         print(f"[Startup Warning] DB init error: {e}")
 
 
+class VercelPathFix:
+    """WSGI middleware ensuring proper routing on Vercel serverless deployments."""
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        path = environ.get('PATH_INFO', '')
+        if path == '/api/index.py' or path == '/api/index.py/':
+            environ['PATH_INFO'] = '/'
+        elif path.startswith('/api/index.py/'):
+            environ['PATH_INFO'] = path[len('/api/index.py'):]
+        elif path.startswith('/api/'):
+            environ['PATH_INFO'] = path[len('/api'):]
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = VercelPathFix(app.wsgi_app)
+
+
+@app.route("/api/index.py")
+def vercel_root():
+    """Fallback handler for Vercel default rewrite target."""
+    return index()
+
+
+
 @app.context_processor
 def inject_global_data():
     """Inject common attributes to all templates."""
